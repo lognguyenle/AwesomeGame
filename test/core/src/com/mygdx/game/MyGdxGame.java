@@ -9,7 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.*;
 
 public class MyGdxGame extends ApplicationAdapter {
 
-	public class MyActor extends Actor {
+	private Stage stage;
+	private Group group;
+
+	//Actors including background and dialogue box.
+	public class Background extends Actor {
 		Texture texture = new Texture(Gdx.files.internal("background1.jpg"));
 			float actorX = 0, actorY = 0;
 		
@@ -18,16 +22,31 @@ public class MyGdxGame extends ApplicationAdapter {
 		
 		}	
 	}
-	private Stage stage;
 
+	public class DialogueBox extends Actor {
+		Texture texture = new Texture(Gdx.files.internal("dialogue box.png"));
+			float actorX = 0, actorY = 0;
+
+		public void draw(Batch batch, float alpha){
+			batch.draw(texture, 10, 20);
+		}
+	}
+	
+	//Start of ApplicationListener life-cycle
 	@Override
 	public void create() {
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 
-		MyActor Actor = new MyActor();
-		Actor.setTouchable(Touchable.enabled);
-		stage.addActor(Actor);
+		Background background = new Background();
+		background.setTouchable(Touchable.enabled);
+		stage.addActor(background);
+		
+		DialogueBox dialogueBox = new DialogueBox();
+		dialogueBox.setTouchable(Touchable.enabled);
+		stage.addActor(dialogueBox);
+
+
 
 	}
 
