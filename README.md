@@ -1,2 +1,5 @@
 # AwesomeGame
-very WIP
+very WIP game
+
+Survival RPG Visual Novel
+Using libGDX
