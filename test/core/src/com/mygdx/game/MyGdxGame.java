@@ -44,7 +44,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 
 		public void draw(Batch batch, float alpha){
-			font.draw(batch, text, 39, 30);
+			font.draw(batch, text, 60, 510);
 		}
 	}
 	
