@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import java.util.Scanner;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,6 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 public class MyGdxGame extends ApplicationAdapter {
 
@@ -31,10 +36,9 @@ public class MyGdxGame extends ApplicationAdapter {
 	//DialogueBox Actor
 	public class DialogueBox extends Actor {
 		Texture texture = new Texture(Gdx.files.internal("dialogue box.png"));
-			float actorX = 0, actorY = 0;
+			float actorX = 20, actorY = 300;
 		public DialogueBox() {
 			setBounds(20,300,texture.getWidth(),texture.getHeight());
-			
 		}
 		
 
@@ -44,7 +48,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	}
 
 	//DialogueText Actor, will have a typewriting effect
-	public class DialogueText extends Actor {
+	final public class DialogueText extends Actor {
 		BitmapFont font = new BitmapFont(Gdx.files.internal("font.fnt")); 
 			float actorX = 0, actorY = 0;
 		String text;
@@ -79,23 +83,43 @@ public class MyGdxGame extends ApplicationAdapter {
 		dialogueText.setTouchable(Touchable.disabled);
 		stage.addActor(dialogueText);
 		
-		RunnableAction updateDialogue = new RunnableAction();
-		
-		updateDialogue.setRunnable(new Runnable(){
+
+
+
+
+
+
+		dialogueBox.addListener(new ClickListener(){
+			boolean clicked = false;
 			@Override
-			public void run(){
-
-				dialogueText.updateText("dog");
-			}
-		});
-
+			public void clicked(InputEvent event, float x, float y){
+				System.out.println("true!");
+				final String bruh = "Bruhhhhhhhhhhhhhhhh";
+				clicked = true;
+				if(clicked){
+				Timer.schedule(new Task(){
+					int i = 0;
+					public void run() {
+						
+						if(i < bruh.length()-1){
+							dialogueText.updateText(bruh.substring(0,i));
+							i++;
+					}
+				}}, 0,0.05f,bruh.length());}
+				clicked = false;
+				System.out.println("false!");
+			}});
 		
-}
+	}
+		
+		
 
 	@Override
 	public void render () {
 		ScreenUtils.clear(0, 0, 0, 1);
+		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
+		
 		
 	}
 	
