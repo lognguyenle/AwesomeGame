@@ -6,7 +6,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class MyGdxGame extends ApplicationAdapter {
 
@@ -20,7 +25,6 @@ public class MyGdxGame extends ApplicationAdapter {
 		
 		public void draw(Batch batch, float alpha){
 			batch.draw(texture, 20, 300);
-		
 		}	
 	}
 
@@ -28,6 +32,11 @@ public class MyGdxGame extends ApplicationAdapter {
 	public class DialogueBox extends Actor {
 		Texture texture = new Texture(Gdx.files.internal("dialogue box.png"));
 			float actorX = 0, actorY = 0;
+		public DialogueBox() {
+			setBounds(20,300,texture.getWidth(),texture.getHeight());
+			
+		}
+		
 
 		public void draw(Batch batch, float alpha){
 			batch.draw(texture, 20, 300);
@@ -46,6 +55,10 @@ public class MyGdxGame extends ApplicationAdapter {
 		public void draw(Batch batch, float alpha){
 			font.draw(batch, text, 60, 510);
 		}
+
+		public void updateText(final String input){
+			text = input;
+		}
 	}
 	
 	//Start of ApplicationListener life-cycle
@@ -62,11 +75,22 @@ public class MyGdxGame extends ApplicationAdapter {
 		dialogueBox.setTouchable(Touchable.enabled);
 		stage.addActor(dialogueBox);
 
-		DialogueText dialogueText = new DialogueText("sada");
+		final DialogueText dialogueText = new DialogueText("sada");
 		dialogueText.setTouchable(Touchable.disabled);
 		stage.addActor(dialogueText);
+		
+		RunnableAction updateDialogue = new RunnableAction();
+		
+		updateDialogue.setRunnable(new Runnable(){
+			@Override
+			public void run(){
 
-	}
+				dialogueText.updateText("dog");
+			}
+		});
+
+		
+}
 
 	@Override
 	public void render () {
@@ -77,6 +101,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
+		stage.dispose();
 		
 	}
 }
