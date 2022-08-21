@@ -82,13 +82,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		final DialogueText dialogueText = new DialogueText("sada");
 		dialogueText.setTouchable(Touchable.disabled);
 		stage.addActor(dialogueText);
-		
 
-
-
-
-
-
+		//Typewriter effect for clicking dialogueBox
 		dialogueBox.addListener(new ClickListener(){
 			boolean clicked = false;
 			@Override
