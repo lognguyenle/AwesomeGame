@@ -75,7 +75,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		background.setTouchable(Touchable.enabled);
 		stage.addActor(background);
 		
-		DialogueBox dialogueBox = new DialogueBox();
+		final DialogueBox dialogueBox = new DialogueBox();
 		dialogueBox.setTouchable(Touchable.enabled);
 		stage.addActor(dialogueBox);
 
@@ -85,27 +85,24 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		//Typewriter effect for clicking dialogueBox
 		dialogueBox.addListener(new ClickListener(){
-			boolean textFinished = false;
-			boolean clicked = true;
+			boolean textFinished = true;
 			@Override
 			public void clicked(InputEvent event, float x, float y){
+				if(Timer.instance().isEmpty()){
+					textFinished = true;
+				}
 				System.out.println("true!");
 				final String bruh = "Bruhhhhhhhhhhhhhhhh";
-				clicked = true;
-				if(clicked) {
+				if(textFinished == true) {
+					textFinished = false;
+					if(Timer.instance().isEmpty()){
 					Timer.schedule(new Task() {
 						int i = 0;
-
 						public void run() {
-
 							if (i < bruh.length() - 1) {
 								dialogueText.updateText(bruh.substring(0, i));
 								i++;
-							}
-						}
-					}, 0, 0.05f, bruh.length());
-					textFinished = true;
-					clicked = false;
+							}}}, 0, 0.05f, bruh.length());}
 				}
 				System.out.println("text finished!");
 			}});
