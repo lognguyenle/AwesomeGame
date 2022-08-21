@@ -92,18 +92,21 @@ public class MyGdxGame extends ApplicationAdapter {
 				System.out.println("true!");
 				final String bruh = "Bruhhhhhhhhhhhhhhhh";
 				clicked = true;
-				if(clicked){
-				Timer.schedule(new Task(){
-					int i = 0;
-					public void run() {
-						
-						if(i < bruh.length()-1){
-							dialogueText.updateText(bruh.substring(0,i));
-							i++;
-					}
-				}}, 0,0.05f,bruh.length());}
-				textFinished = true;
-				clicked = false;
+				if(clicked) {
+					Timer.schedule(new Task() {
+						int i = 0;
+
+						public void run() {
+
+							if (i < bruh.length() - 1) {
+								dialogueText.updateText(bruh.substring(0, i));
+								i++;
+							}
+						}
+					}, 0, 0.05f, bruh.length());
+					textFinished = true;
+					clicked = false;
+				}
 				System.out.println("text finished!");
 			}});
 		
