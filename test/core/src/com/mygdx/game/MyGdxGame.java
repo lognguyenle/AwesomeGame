@@ -85,7 +85,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		//Typewriter effect for clicking dialogueBox
 		dialogueBox.addListener(new ClickListener(){
-			boolean clicked = false;
+			boolean textFinished = false;
+			boolean clicked = true;
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				System.out.println("true!");
@@ -101,8 +102,9 @@ public class MyGdxGame extends ApplicationAdapter {
 							i++;
 					}
 				}}, 0,0.05f,bruh.length());}
+				textFinished = true;
 				clicked = false;
-				System.out.println("false!");
+				System.out.println("text finished!");
 			}});
 		
 	}
