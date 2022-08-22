@@ -3,6 +3,7 @@ package com.mygdx.game;
 import java.util.Scanner;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -11,12 +12,19 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
+import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MyGdxGame extends ApplicationAdapter {
 
@@ -29,6 +37,7 @@ public class MyGdxGame extends ApplicationAdapter {
 			float actorX = 0, actorY = 0;
 		
 		public void draw(Batch batch, float alpha){
+			batch.setColor(this.getColor());
 			batch.draw(texture, 20, 300);
 		}	
 	}
@@ -43,7 +52,9 @@ public class MyGdxGame extends ApplicationAdapter {
 		
 
 		public void draw(Batch batch, float alpha){
+			batch.setColor(this.getColor());
 			batch.draw(texture, 20, 300);
+			
 		}
 	}
 
@@ -64,10 +75,31 @@ public class MyGdxGame extends ApplicationAdapter {
 			text = input;
 		}
 	}
+
+	//DialogueMarker Actor
+	public class DialogueMarker extends Actor {
+		Texture texture = new Texture(Gdx.files.internal("downarrow.png"));
+		@Override
+		public void draw(Batch batch, float alpha){
+			
+			batch.setColor(this.getColor());
+			batch.draw(texture, 1300, 320);
+			batch.setColor(batch.getColor());
+			
+		}
+		@Override
+		public void act(float delta){
+			super.act(delta);
+		}
+		
+
+	}
 	
 	//Start of ApplicationListener life-cycle
 	@Override
 	public void create() {
+
+		//Creates stage and then respective actors
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 
@@ -83,28 +115,55 @@ public class MyGdxGame extends ApplicationAdapter {
 		dialogueText.setTouchable(Touchable.disabled);
 		stage.addActor(dialogueText);
 
+		final DialogueMarker dialogueMarker = new DialogueMarker();
+		stage.addActor(dialogueMarker);
+		
+
+		//Looper for flashing dialogueMarker
+		final ColorAction transparent = new ColorAction();
+		transparent.setEndColor(new Color(0, 0, 0, 0));
+		transparent.setDuration(1);
+
+		final ColorAction opaque = new ColorAction();
+		opaque.setEndColor(new Color(255, 255, 255, 1));
+		opaque.setDuration(1);
+
+		DelayAction delay = new DelayAction();
+		delay.setDuration(0.5f);
+
+		final SequenceAction dialogueMarkerLoop = new SequenceAction();
+		dialogueMarkerLoop.addAction(delay);
+		dialogueMarkerLoop.addAction(transparent);
+		dialogueMarkerLoop.addAction(delay);
+		dialogueMarkerLoop.addAction(opaque);
+
+		final RepeatAction dialogueMarkerLooper = new RepeatAction();
+		dialogueMarkerLooper.setCount(RepeatAction.FOREVER);
+		dialogueMarkerLooper.setAction(dialogueMarkerLoop);
+		dialogueMarker.addAction(dialogueMarkerLooper);
+
+		
 		//Typewriter effect for clicking dialogueBox
 		dialogueBox.addListener(new ClickListener(){
-			boolean textFinished = true;
 			@Override
 			public void clicked(InputEvent event, float x, float y){
-				if(Timer.instance().isEmpty()){
-					textFinished = true;
-				}
-				System.out.println("true!");
 				final String bruh = "Bruhhhhhhhhhhhhhhhh";
-				if(textFinished == true) {
-					textFinished = false;
 					if(Timer.instance().isEmpty()){
 					Timer.schedule(new Task() {
 						int i = 0;
 						public void run() {
+							dialogueMarker.setVisible(false);
 							if (i < bruh.length() - 1) {
 								dialogueText.updateText(bruh.substring(0, i));
 								i++;
-							}}}, 0, 0.05f, bruh.length());}
-				}
-				System.out.println("text finished!");
+								}
+								if(bruh.length()-1 == i){
+									dialogueMarker.setVisible(true);
+									dialogueMarker.setColor(255, 255, 255, 1);
+									
+							}}
+						}, 0, 0.05f, bruh.length());}
+							System.out.println("done?");
 			}});
 		
 	}
@@ -114,7 +173,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void render () {
 		ScreenUtils.clear(0, 0, 0, 1);
-		stage.act(Gdx.graphics.getDeltaTime());
+		stage.act();
 		stage.draw();
 		
 		
