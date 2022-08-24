@@ -35,7 +35,6 @@ public class MyGdxGame extends ApplicationAdapter {
 	public class Background extends Actor {
 		Texture texture = new Texture(Gdx.files.internal("background1.jpg"));
 			float actorX = 0, actorY = 0;
-		
 		public void draw(Batch batch, float alpha){
 			batch.setColor(this.getColor());
 			batch.draw(texture, 20, 300);
@@ -49,12 +48,9 @@ public class MyGdxGame extends ApplicationAdapter {
 		public DialogueBox() {
 			setBounds(20,300,texture.getWidth(),texture.getHeight());
 		}
-		
-
 		public void draw(Batch batch, float alpha){
 			batch.setColor(this.getColor());
 			batch.draw(texture, 20, 300);
-			
 		}
 	}
 
@@ -66,33 +62,29 @@ public class MyGdxGame extends ApplicationAdapter {
 		public DialogueText(String input){
 			text = input; 
 		}
-
 		public void draw(Batch batch, float alpha){
 			font.draw(batch, text, 60, 510);
 		}
-
 		public void updateText(final String input){
 			text = input;
 		}
 	}
+	
+
 
 	//DialogueMarker Actor
 	public class DialogueMarker extends Actor {
 		Texture texture = new Texture(Gdx.files.internal("downarrow.png"));
 		@Override
 		public void draw(Batch batch, float alpha){
-			
 			batch.setColor(this.getColor());
 			batch.draw(texture, 1300, 320);
 			batch.setColor(batch.getColor());
-			
 		}
 		@Override
 		public void act(float delta){
 			super.act(delta);
 		}
-		
-
 	}
 	
 	//Start of ApplicationListener life-cycle
@@ -111,7 +103,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		dialogueBox.setTouchable(Touchable.enabled);
 		stage.addActor(dialogueBox);
 
-		final DialogueText dialogueText = new DialogueText("sada");
+		final DialogueText dialogueText = new DialogueText("sada\naaaaaaaa");
 		dialogueText.setTouchable(Touchable.disabled);
 		stage.addActor(dialogueText);
 
@@ -147,7 +139,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		dialogueBox.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
-				final String bruh = "Bruhhhhhhhhhhhhhhhh";
+				final String bruh = "Bruhhhhhhhhhhhhhhhh\nlollllllllllllll\n aaaaaaa";
 					if(Timer.instance().isEmpty()){
 					Timer.schedule(new Task() {
 						int i = 0;
