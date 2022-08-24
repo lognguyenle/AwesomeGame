@@ -1,12 +1,17 @@
 package com.mygdx.game;
 
 import java.util.Scanner;
+
+import org.w3c.dom.Text;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -25,11 +30,15 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 
 public class MyGdxGame extends ApplicationAdapter {
 
 	private Stage stage;
 	private Group group;
+	private Table table;
+
+	
 
 	//Background Actor
 	public class Background extends Actor {
@@ -69,7 +78,7 @@ public class MyGdxGame extends ApplicationAdapter {
 			text = input;
 		}
 	}
-	
+
 
 
 	//DialogueMarker Actor
@@ -87,6 +96,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 	}
 	
+	
 	//Start of ApplicationListener life-cycle
 	@Override
 	public void create() {
@@ -94,6 +104,9 @@ public class MyGdxGame extends ApplicationAdapter {
 		//Creates stage and then respective actors
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
+
+		table = new Table();
+		stage.addActor(table);
 
 		Background background = new Background();
 		background.setTouchable(Touchable.enabled);
@@ -103,9 +116,36 @@ public class MyGdxGame extends ApplicationAdapter {
 		dialogueBox.setTouchable(Touchable.enabled);
 		stage.addActor(dialogueBox);
 
-		final DialogueText dialogueText = new DialogueText("sada\naaaaaaaa");
+		final DialogueText dialogueText = new DialogueText("");
 		dialogueText.setTouchable(Touchable.disabled);
 		stage.addActor(dialogueText);
+
+		//UI Label Widget
+		Label.LabelStyle TextDialogueLabelStyle = new Label.LabelStyle();
+		BitmapFont defaultFont = new BitmapFont(Gdx.files.internal("font.fnt"));
+		TextDialogueLabelStyle.font = defaultFont;
+		TextDialogueLabelStyle.fontColor = Color.WHITE;
+		final Label DialogueLabel = new Label("", TextDialogueLabelStyle);
+		DialogueLabel.setPosition(60, 342);
+		DialogueLabel.setSize(1250, 188);
+		DialogueLabel.setAlignment(Align.left);
+		DialogueLabel.setWrap(true); 
+		DialogueLabel.setTouchable(Touchable.disabled);
+
+		//Scroll pane that takes in DialogueLabel
+		final ScrollPane scrolly = new ScrollPane(DialogueLabel);
+		scrolly.setScrollbarsVisible(false);
+		scrolly.setScrollY(20);
+		scrolly.setTouchable(Touchable.disabled);
+
+		//Setup table for ui
+		table.add(scrolly).width(1250);
+		table.setPosition(60, 342);
+		table.setHeight(188);
+		table.setWidth(1250);
+		table.setZIndex(6);
+		table.left().top();
+		table.setDebug(true);
 
 		final DialogueMarker dialogueMarker = new DialogueMarker();
 		stage.addActor(dialogueMarker);
@@ -139,22 +179,24 @@ public class MyGdxGame extends ApplicationAdapter {
 		dialogueBox.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
-				final String bruh = "Bruhhhhhhhhhhhhhhhh\nlollllllllllllll\n aaaaaaa";
+				final String bruh = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 					if(Timer.instance().isEmpty()){
 					Timer.schedule(new Task() {
 						int i = 0;
 						public void run() {
 							dialogueMarker.setVisible(false);
 							if (i < bruh.length() - 1) {
-								dialogueText.updateText(bruh.substring(0, i));
+								//dialogueText.updateText(bruh.substring(0, i));
+								DialogueLabel.setText(bruh.substring(0,i));
 								i++;
+								scrolly.scrollTo(0, 0, 0, 0);
 								}
 								if(bruh.length()-1 == i){
 									dialogueMarker.setVisible(true);
 									dialogueMarker.setColor(255, 255, 255, 1);
 									
 							}}
-						}, 0, 0.05f, bruh.length());}
+						}, 0, 0.02f, bruh.length());}
 							System.out.println("done?");
 			}});
 		
