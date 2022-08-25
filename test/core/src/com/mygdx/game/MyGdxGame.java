@@ -1,13 +1,11 @@
 package com.mygdx.game;
-
 import java.util.Scanner;
-
 import org.w3c.dom.Text;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -25,11 +23,13 @@ import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 
 public class MyGdxGame extends ApplicationAdapter {
@@ -37,49 +37,6 @@ public class MyGdxGame extends ApplicationAdapter {
 	private Stage stage;
 	private Group group;
 	private Table table;
-
-	
-
-	//Background Actor
-	public class Background extends Actor {
-		Texture texture = new Texture(Gdx.files.internal("background1.jpg"));
-			float actorX = 0, actorY = 0;
-		public void draw(Batch batch, float alpha){
-			batch.setColor(this.getColor());
-			batch.draw(texture, 20, 300);
-		}	
-	}
-
-	//DialogueBox Actor
-	public class DialogueBox extends Actor {
-		Texture texture = new Texture(Gdx.files.internal("dialogue box.png"));
-			float actorX = 20, actorY = 300;
-		public DialogueBox() {
-			setBounds(20,300,texture.getWidth(),texture.getHeight());
-		}
-		public void draw(Batch batch, float alpha){
-			batch.setColor(this.getColor());
-			batch.draw(texture, 20, 300);
-		}
-	}
-
-	//DialogueText Actor, will have a typewriting effect
-	final public class DialogueText extends Actor {
-		BitmapFont font = new BitmapFont(Gdx.files.internal("font.fnt")); 
-			float actorX = 0, actorY = 0;
-		String text;
-		public DialogueText(String input){
-			text = input; 
-		}
-		public void draw(Batch batch, float alpha){
-			font.draw(batch, text, 60, 510);
-		}
-		public void updateText(final String input){
-			text = input;
-		}
-	}
-
-
 
 	//DialogueMarker Actor
 	public class DialogueMarker extends Actor {
@@ -107,49 +64,55 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		table = new Table();
 		stage.addActor(table);
+		table.setFillParent(true);
+		table.top().left();
 
-		Background background = new Background();
-		background.setTouchable(Touchable.enabled);
-		stage.addActor(background);
-		
-		final DialogueBox dialogueBox = new DialogueBox();
-		dialogueBox.setTouchable(Touchable.enabled);
-		stage.addActor(dialogueBox);
+		Table VisualNovelTable = new Table();
 
-		final DialogueText dialogueText = new DialogueText("");
-		dialogueText.setTouchable(Touchable.disabled);
-		stage.addActor(dialogueText);
+		Table DialogueBoxTable = new Table();
 
-		//UI Label Widget
+		Table DialogueTextTable = new Table();
+
+		//Setup tables for ui
+
+		Pixmap visualNovelBG = new Pixmap(Gdx.files.internal("background1.jpg"));
+		TextureRegionDrawable visualNovelBGDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(visualNovelBG)));
+		VisualNovelTable.setBackground(visualNovelBGDrawable);
+		table.add(VisualNovelTable).padLeft(20).padTop(20);
+
+		Pixmap DialogueBG = new Pixmap(Gdx.files.internal("dialogue box.png"));
+		TextureRegionDrawable DialogueBGDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(DialogueBG)));
+		DialogueBoxTable.setBackground(DialogueBGDrawable);
+		DialogueBoxTable.setTouchable(Touchable.enabled);
+		VisualNovelTable.add(DialogueBoxTable).padTop(508);
+		VisualNovelTable.left().top();
+
+		//UI DialogueLabel Widget
 		Label.LabelStyle TextDialogueLabelStyle = new Label.LabelStyle();
 		BitmapFont defaultFont = new BitmapFont(Gdx.files.internal("font.fnt"));
 		TextDialogueLabelStyle.font = defaultFont;
 		TextDialogueLabelStyle.fontColor = Color.WHITE;
 		final Label DialogueLabel = new Label("", TextDialogueLabelStyle);
-		DialogueLabel.setPosition(60, 342);
-		DialogueLabel.setSize(1250, 188);
+
 		DialogueLabel.setAlignment(Align.left);
 		DialogueLabel.setWrap(true); 
 		DialogueLabel.setTouchable(Touchable.disabled);
-
+	
 		//Scroll pane that takes in DialogueLabel
 		final ScrollPane scrolly = new ScrollPane(DialogueLabel);
 		scrolly.setScrollbarsVisible(false);
 		scrolly.setScrollY(20);
 		scrolly.setTouchable(Touchable.disabled);
+	
+		DialogueTextTable.add(scrolly).width(1250);
+		DialogueTextTable.setZIndex(6);
+		DialogueTextTable.left().top();
+		DialogueTextTable.setTouchable(Touchable.disabled);
+		DialogueBoxTable.add(DialogueTextTable).width(1250).height(188);
 
-		//Setup table for ui
-		table.add(scrolly).width(1250);
-		table.setPosition(60, 342);
-		table.setHeight(188);
-		table.setWidth(1250);
-		table.setZIndex(6);
-		table.left().top();
-		table.setDebug(true);
-
+		//Intialize DialogueMarker actor
 		final DialogueMarker dialogueMarker = new DialogueMarker();
 		stage.addActor(dialogueMarker);
-		
 
 		//Looper for flashing dialogueMarker
 		final ColorAction transparent = new ColorAction();
@@ -175,8 +138,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		dialogueMarker.addAction(dialogueMarkerLooper);
 
 		
-		//Typewriter effect for clicking dialogueBox
-		dialogueBox.addListener(new ClickListener(){
+		//Typewriter effect for clicking DialogueBoxTable
+		DialogueBoxTable.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				final String bruh = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
@@ -186,7 +149,6 @@ public class MyGdxGame extends ApplicationAdapter {
 						public void run() {
 							dialogueMarker.setVisible(false);
 							if (i < bruh.length() - 1) {
-								//dialogueText.updateText(bruh.substring(0, i));
 								DialogueLabel.setText(bruh.substring(0,i));
 								i++;
 								scrolly.scrollTo(0, 0, 0, 0);
@@ -194,7 +156,6 @@ public class MyGdxGame extends ApplicationAdapter {
 								if(bruh.length()-1 == i){
 									dialogueMarker.setVisible(true);
 									dialogueMarker.setColor(255, 255, 255, 1);
-									
 							}}
 						}, 0, 0.02f, bruh.length());}
 							System.out.println("done?");
@@ -202,8 +163,6 @@ public class MyGdxGame extends ApplicationAdapter {
 		
 	}
 		
-		
-
 	@Override
 	public void render () {
 		ScreenUtils.clear(0, 0, 0, 1);
