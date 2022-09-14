@@ -191,7 +191,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		int ChoiceBump = ChoiceGUICalc("ChoiceBump", Choices);
 		VisualNovelTable.add(Choices1).padTop(ChoiceBump);
 		VisualNovelTable.row();
-		VisualNovelTable.add(Choices1).padTop(ChoiceBump);
+		VisualNovelTable.add(Choices2).padTop(ChoiceBump);
 		VisualNovelTable.row();
 		VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", Choices));
 		VisualNovelTable.left().top();
