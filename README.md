@@ -8,3 +8,7 @@ Currently working on implementing visual novel aspect
 
 ## Shortcut to the code:
 https://github.com/lognguyenle/AwesomeGame/blob/main/test/core/src/com/mygdx/game/MyGdxGame.java
+
+## Layout plans:
+Current plans for ui
+(https://github.com/lognguyenle/AwesomeGame/blob/main/Documentation/layout.png)
