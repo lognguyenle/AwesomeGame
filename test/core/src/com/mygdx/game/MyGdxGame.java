@@ -85,7 +85,6 @@ public class MyGdxGame extends ApplicationAdapter {
 			result = ChoiceBump;
 			break;
 		}
-
 		return result;
 	} 
 	
@@ -156,11 +155,11 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		//Looper for flashing dialogueMarker
 		final ColorAction transparent = new ColorAction();
-		transparent.setEndColor(new Color(0, 0, 0, 0));
+		transparent.setEndColor(new Color(255, 255, 255, 0));
 		transparent.setDuration(1);
 
 		final ColorAction opaque = new ColorAction();
-		opaque.setEndColor(new Color(255, 255, 255, 1));
+		opaque.setEndColor(new Color(255, 255, 255, 255));
 		opaque.setDuration(1);
 
 		DelayAction delay = new DelayAction();
@@ -201,22 +200,23 @@ public class MyGdxGame extends ApplicationAdapter {
 		DialogueBoxTable.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
-				final String bruh = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+				final String tempText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 					if(Timer.instance().isEmpty()){
 					Timer.schedule(new Task() {
 						int i = 0;
 						public void run() {
 							dialogueMarker.setVisible(false);
-							if (i < bruh.length() - 1) {
-								DialogueLabel.setText(bruh.substring(0,i));
+							if (i < tempText.length() - 1) {
+								DialogueLabel.setText(tempText.substring(0,i));
 								i++;
 								scrolly.scrollTo(0, 0, 0, 0);
 								}
-								if(bruh.length()-1 == i){
+								if(tempText.length()-1 == i){
 									dialogueMarker.setVisible(true);
 									dialogueMarker.setColor(255, 255, 255, 1);
 							}}
-						}, 0, 0.02f, bruh.length());}
+						}, 0, 0.02f, tempText.length());}
+					
 							System.out.println("done?");
 			}});
 		
