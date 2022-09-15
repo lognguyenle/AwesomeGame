@@ -10,6 +10,7 @@ Currently working on implementing visual novel aspect
 
 ## Layout plans:
 Current plans for ui
-Defintiely not final 
+
+Definitely not final 
 
 ![here](https://github.com/lognguyenle/AwesomeGame/blob/main/Documentation/layout.png?raw=true)
