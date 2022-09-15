@@ -11,4 +11,4 @@ https://github.com/lognguyenle/AwesomeGame/blob/main/test/core/src/com/mygdx/gam
 
 ## Layout plans:
 Current plans for ui
-(Documentation/layout.png)
+[alt text](https://github.com/lognguyenle/AwesomeGame/blob/main/Documentation/layout.png)
