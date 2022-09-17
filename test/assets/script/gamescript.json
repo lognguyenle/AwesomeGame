@@ -1,0 +1,7 @@
+{
+    "class": "com.test.CharacterText",
+    "dialogueList" : [
+    {"class":"java.lang.String",
+    "value": "TEST TEST TEST TEST"}],
+    "name" : "IntroductionTEST"
+}

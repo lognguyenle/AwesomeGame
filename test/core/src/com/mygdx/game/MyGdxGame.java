@@ -1,4 +1,5 @@
 package com.mygdx.game;
+import java.util.ArrayList;
 import java.util.Scanner;
 import org.w3c.dom.Text;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -7,6 +8,9 @@ import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -32,6 +36,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.utils.Json.*;
+import com.badlogic.gdx.utils.JsonWriter.OutputType;
 
 public class MyGdxGame extends ApplicationAdapter {
 
@@ -62,7 +68,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 	}
 
-	//Gui pad calculator, variables have been added for easier understanding
+	//Gui padding calculator, variables have been added for easier understanding
 	public static int ChoiceGUICalc(String Type, int ChoiceAmount){
 		int result = 0;
 		int ChoiceHeight = 121;
@@ -87,8 +93,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 		return result;
 	} 
-	
-	
+
 	//Start of ApplicationListener life-cycle
 	@Override
 	public void create() {
@@ -109,31 +114,31 @@ public class MyGdxGame extends ApplicationAdapter {
 		
 
 		//Setup tables for ui
-		Table VisualNovelTable = new Table();
+		final Table VisualNovelTable = new Table();
 		Pixmap visualNovelBG = new Pixmap(Gdx.files.internal("background2.jpg"));
 		TextureRegionDrawable visualNovelBGDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(visualNovelBG)));
 		VisualNovelTable.setBackground(visualNovelBGDrawable);
 		table.add(VisualNovelTable).padLeft(20).padTop(20);
 
-		Table Choices1 = new Table();
+		final Table Choices1 = new Table();
 		Pixmap ChoiceBG = new Pixmap(Gdx.files.internal("choicebox 3.png"));
 		TextureRegionDrawable ChoiceBGDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(ChoiceBG)));
 		Choices1.setBackground(ChoiceBGDrawable);
 		Choices1.setTouchable(Touchable.enabled);
 
-		Table Choices2 = new Table();
+		final Table Choices2 = new Table();
 		Choices2.setBackground(ChoiceBGDrawable);
 		Choices2.setTouchable(Touchable.enabled);
 
 		VisualNovelTable.setDebug(true);
-		Table DialogueBoxTable = new Table();
+		final Table DialogueBoxTable = new Table();
 		Pixmap DialogueBG = new Pixmap(Gdx.files.internal("dialogue box.png"));
 		TextureRegionDrawable DialogueBGDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(DialogueBG)));
 		DialogueBoxTable.setBackground(DialogueBGDrawable);
 		DialogueBoxTable.setTouchable(Touchable.enabled);
 
 		//UI DialogueLabel Widget
-		Table DialogueTextTable = new Table();
+		final Table DialogueTextTable = new Table();
 		Label.LabelStyle TextDialogueLabelStyle = new Label.LabelStyle();
 		BitmapFont defaultFont = new BitmapFont(Gdx.files.internal("font.fnt"));
 		TextDialogueLabelStyle.font = defaultFont;
@@ -198,9 +203,13 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		//Typewriter effect for clicking DialogueBoxTable, will add script scanner and move choice gui generator to stuff below.
 		DialogueBoxTable.addListener(new ClickListener(){
+			
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				final String tempText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+				VisualNovelTable.clearChildren();
+				//VisualNovelTable.removeActor(DialogueBoxTable);
+				VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", 0));
 					if(Timer.instance().isEmpty()){
 					Timer.schedule(new Task() {
 						int i = 0;
