@@ -30,6 +30,8 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.Dialogue.Dialogue;
+import com.mygdx.game.Dialogue.DialogueUI;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -40,7 +42,8 @@ import com.badlogic.gdx.utils.Json.*;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 
 public class MyGdxGame extends ApplicationAdapter {
-
+	
+	
 	private Stage stage;
 	private Group group;
 	private Table table;
@@ -97,7 +100,6 @@ public class MyGdxGame extends ApplicationAdapter {
 	//Start of ApplicationListener life-cycle
 	@Override
 	public void create() {
-
 		
 		// copied code from http://acamara.es/blog/2012/02/keep-screen-aspect-ratio-with-different-resolutions-using-libgdx/
 		camera = new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -110,8 +112,6 @@ public class MyGdxGame extends ApplicationAdapter {
 		stage.addActor(table);
 		table.setFillParent(true);
 		table.top().left();
-
-		
 
 		//Setup tables for ui
 		final Table VisualNovelTable = new Table();
@@ -199,28 +199,42 @@ public class MyGdxGame extends ApplicationAdapter {
 		VisualNovelTable.row();
 		VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", Choices));
 		VisualNovelTable.left().top();
-
+		DialogueUI dog3DialogueUI = new DialogueUI();
+		dog3DialogueUI.print();
+		dog3DialogueUI.toJson();
+		dog3DialogueUI.writeJson(dog3DialogueUI.toJson());
 
 		//Typewriter effect for clicking DialogueBoxTable, will add script scanner and move choice gui generator to stuff below.
 		DialogueBoxTable.addListener(new ClickListener(){
 			
+			
+			int clicked = 0;
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				final String tempText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+				clicked++;
+				if(clicked > 1){
+					Timer.instance().clear();
+					dialogueMarker.setVisible(true);
+					dialogueMarker.setColor(255, 255, 255, 1);
+					DialogueLabel.setText(tempText);
+					clicked = 0;
+				}
+				
 				VisualNovelTable.clearChildren();
 				//VisualNovelTable.removeActor(DialogueBoxTable);
 				VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", 0));
-					if(Timer.instance().isEmpty()){
+					if(Timer.instance().isEmpty() && clicked == 1){
 					Timer.schedule(new Task() {
 						int i = 0;
 						public void run() {
 							dialogueMarker.setVisible(false);
-							if (i < tempText.length() - 1) {
+							if (i < tempText.length()) {
 								DialogueLabel.setText(tempText.substring(0,i));
 								i++;
 								scrolly.scrollTo(0, 0, 0, 0);
 								}
-								if(tempText.length()-1 == i){
+								if(tempText.length() == i){
 									dialogueMarker.setVisible(true);
 									dialogueMarker.setColor(255, 255, 255, 1);
 							}}
