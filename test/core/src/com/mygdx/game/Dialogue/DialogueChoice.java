@@ -4,7 +4,7 @@ public class DialogueChoice {
     private String sourceId = "";
     private String destinationId = "";
     private String choiceText = "";
-    //Sometime later connect the dialoguye choice with a respective dialogue choice event
+    //Sometime later connect the dialogue choice with a respective dialogue choice event
     public DialogueChoice(String sourceIdInput, String destinationIdInput, String choiceInput){
         sourceId = sourceIdInput;
         destinationId = destinationIdInput;
