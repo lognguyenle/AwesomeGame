@@ -42,7 +42,7 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.Json.*;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 
-public class MyGdxGame extends ApplicationAdapter {
+public class AwesomeGame extends ApplicationAdapter {
 	
 	private static Stage stage;
 	private static Group group;
