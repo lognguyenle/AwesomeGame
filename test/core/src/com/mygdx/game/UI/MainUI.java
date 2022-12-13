@@ -24,6 +24,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.AwesomeGame;
+import com.mygdx.game.Dialogue.DialogueMap;
+import com.mygdx.game.Dialogue.DialogueReference;
 import com.mygdx.game.Dialogue.DialogueUI;
 
 public class MainUI {
@@ -85,7 +87,6 @@ public class MainUI {
 
     public MainUI(){
 		//Creates stage and then respective actors
-
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 		table = new Table();
@@ -178,49 +179,60 @@ public class MainUI {
 		VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", Choices));
 		VisualNovelTable.left().top();
 
+		//Test json printing in console
         DialogueUI dog3DialogueUI = new DialogueUI();
 		dog3DialogueUI.print();
 		dog3DialogueUI.toJson();
 		dog3DialogueUI.writeJson(dog3DialogueUI.toJson());
-		final String b = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
+		String b = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
 		+ "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit" 
 		+ "in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt"
 		+ "mollit anim id est laborum.";
+
+
+
 		//Typewriter effect for clicking DialogueBoxTable, will add script scanner and move choice gui generator to stuff below.
 		DialogueBoxTable.addListener(new ClickListener(){
-			final String tempText = b;
-			int clicked = 0;
+			DialogueReference dialogueReference = new DialogueReference(); //Intializes dialogueReference object that references the dialogue tree initialized in dialogue UI
+			String currentDialogueText = dialogueReference.getDialogue(); //Receives the current dialogue of the node in the tree through the dialogueReference object
+			int timesClicked = 0; //Reads the times clicked for certain features
 			@Override
 			public void clicked(InputEvent event, float x, float y){
-				clicked++;
-				if(clicked > 1){
+				timesClicked++; 
+				currentDialogueText = dialogueReference.getDialogue();
+				if(timesClicked > 1){ //Completes text generation when clicked twice, resets click timer
 					Timer.instance().clear();
 					dialogueMarker.setVisible(true);
 					dialogueMarker.setColor(255, 255, 255, 1);
-					DialogueLabel.setText(tempText);
-					clicked = 0;
+					DialogueLabel.setText(currentDialogueText);
+					timesClicked = 0;
 				}
 				
-				VisualNovelTable.clearChildren();
-				//VisualNovelTable.removeActor(DialogueBoxTable);
-				VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", 0));
-					if(Timer.instance().isEmpty() && clicked == 1){
-					Timer.schedule(new Task() {
+				VisualNovelTable.clearChildren();	//Temporary fix to clear tables like choice sprites
+				VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", 0)); //Adds DialogueBox table with proper spacing
+
+				if(Timer.instance().isEmpty() && timesClicked == 1){  //Whole text generation timer loop, uses a timer that runs for the length of the string, basically
+					Timer.schedule(new Task() {                       //a delayed for() loop
 						int i = 0;
+						boolean finished = false; //finished boolean to prevent overlapping events
 						public void run() {
 							dialogueMarker.setVisible(false);
-							if (i < tempText.length()) {
-								DialogueLabel.setText(tempText.substring(0,i));
+							if (i <= currentDialogueText.length()) {
+								DialogueLabel.setText(currentDialogueText.substring(0,i));
 								i++;
 								scrolly.scrollTo(0, 0, 0, 0);
 								}
-								if(tempText.length() == i){
-									dialogueMarker.setVisible(true);
-									dialogueMarker.setColor(255, 255, 255, 1);
+							if(currentDialogueText.length()+1 == i && finished == false) {
+								dialogueMarker.setVisible(true);
+								dialogueMarker.setColor(255, 255, 255, 1);
+								System.out.println("done?"); //console test print
+								finished = true;
+								timesClicked = 0; //resets clicked variable
 							}}
-						}, 0, 0.02f, tempText.length());}
-					
-							System.out.println("done?");
+						}, 0, 0.02f, currentDialogueText.length());
+					}
+					dialogueReference.tick(); //ticks to reference the next node in the dialogue tree
+							
 			}});
     }
 }
