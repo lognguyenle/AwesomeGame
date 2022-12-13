@@ -5,6 +5,11 @@
 		"characterName": "narrator",
 		"dialogueText": "Testing, testing, Do you yield?",
 		"id": "a1"
+	},
+	"b1": {
+		"characterName": "narrator",
+		"dialogueText": "Hey man......",
+		"id": "b1"
 	}
 },
 "keysToDialogueChoices": {
@@ -28,7 +33,8 @@
 			"destinationId": "a4",
 			"choiceText": "Why?"
 		}
-	]
+	],
+	"b1": []
 },
 "currentId": "a1"
 }
