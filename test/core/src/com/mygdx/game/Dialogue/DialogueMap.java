@@ -45,6 +45,10 @@ public class DialogueMap {
         currentId = inputId;
     }
 
+    public String getCurrentDialogueId(){
+        return currentId;
+    }
+
     // NO idea how this is useful
     // public ArrayList<DialogueChoice> getCurrentChoiceList(){
     //     return keysToDialogueChoices.get(currentId);
@@ -71,6 +75,10 @@ public class DialogueMap {
         keysToDialogueChoices.put(dialogueChoiceInput.getSource(), inputList);
     }
 
+    public int choiceCount(){
+        return getChoiceText().size();
+    }
+
     //returns the Choice text as a String list
     public List<String> getChoiceText(){
         List<String> outputList = new ArrayList<String>();
@@ -81,11 +89,11 @@ public class DialogueMap {
     }
 
     //To be called when the game progresses through a choice, the method will change the current id of the map to the destination of that choice vertex
-    public void ChooseChoice(int choicePicked){
+    public void chooseChoice(int choicePicked){
         currentId = keysToDialogueChoices.get(currentId).get(choicePicked - 1).getDestination();
     }
 
-    public void LoadJson(String input){
+    public void loadJson(String input){
         Json json = new Json();
         DialogueMap inputMap = new DialogueMap();
         inputMap = json.fromJson(DialogueMap.class, input);

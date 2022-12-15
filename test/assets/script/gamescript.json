@@ -6,10 +6,15 @@
 		"dialogueText": "Testing, testing, Do you yield?",
 		"id": "a1"
 	},
-	"b1": {
+	"a2": {
 		"characterName": "narrator",
 		"dialogueText": "Hey man......",
-		"id": "b1"
+		"id": "a2"
+	},
+	"a3": {
+		"characterName": "narrator",
+		"dialogueText": "Testing, testing, Do you yield?",
+		"id": "a3"
 	}
 },
 "keysToDialogueChoices": {
@@ -34,7 +39,15 @@
 			"choiceText": "Why?"
 		}
 	],
-	"b1": []
+	"a2": [
+		{
+			"class": "com.mygdx.game.Dialogue.DialogueChoice",
+			"sourceId": "a2",
+			"destinationId": "a3",
+			"choiceText": "Yes"
+		}
+	],
+	"a3": []
 },
 "currentId": "a1"
 }

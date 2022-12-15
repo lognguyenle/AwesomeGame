@@ -18,9 +18,22 @@ public class DialogueReference {
         return currentDialogue;
     }
 
-    public void tick() {
-        dialogueMap.setCurrentDialogueId("b1");
+    public int getChoiceCount(){
+        System.out.println(dialogueMap.choiceCount());
+        System.out.println(dialogueMap.getCurrentDialogueId());
+        return dialogueMap.choiceCount();
+    }
+
+    public void nextDialogue() {
+        dialogueMap.chooseChoice(1);
         currentDialogue = dialogueMap.getDialogue();
     }
+
+    public void chooseChoice(int choice){
+        dialogueMap.chooseChoice(choice);
+        currentDialogue = dialogueMap.getDialogue();
+    }
+
+
 
 }
