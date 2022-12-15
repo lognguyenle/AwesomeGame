@@ -4,15 +4,15 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/test" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/mainProject" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$/test" />
-            <option value="$PROJECT_DIR$/test/android" />
-            <option value="$PROJECT_DIR$/test/core" />
-            <option value="$PROJECT_DIR$/test/desktop" />
-            <option value="$PROJECT_DIR$/test/html" />
-            <option value="$PROJECT_DIR$/test/ios" />
+            <option value="$PROJECT_DIR$/mainProject" />
+            <option value="$PROJECT_DIR$/mainProject/android" />
+            <option value="$PROJECT_DIR$/mainProject/core" />
+            <option value="$PROJECT_DIR$/mainProject/desktop" />
+            <option value="$PROJECT_DIR$/mainProject/html" />
+            <option value="$PROJECT_DIR$/mainProject/ios" />
           </set>
         </option>
       </GradleProjectSettings>
