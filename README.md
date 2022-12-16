@@ -4,7 +4,7 @@ very WIP game
 Survival RPG Visual Novel
 Using libGDX
 
-Currently working on implementing visual novel aspect
+Currentley working on implementing visual novel aspect
 
 [Shortcut to code](https://github.com/lognguyenle/AwesomeGame/blob/main/mainProject/core/src/com/mygdx/game/AwesomeGame.java)
 
