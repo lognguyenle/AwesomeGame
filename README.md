@@ -14,3 +14,6 @@ Current plans for ui
 Definitely not final 
 
 ![here](https://github.com/lognguyenle/AwesomeGame/blob/main/Documentation/layout.png?raw=true)
+
+
+# HI
