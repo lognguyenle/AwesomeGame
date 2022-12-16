@@ -6,7 +6,7 @@ Using libGDX
 
 Currently working on implementing visual novel aspect
 
-[Shortcut to code](https://github.com/lognguyenle/AwesomeGame/blob/main/test/core/src/com/mygdx/game/MyGdxGame.java)
+[Shortcut to code](https://github.com/lognguyenle/AwesomeGame/blob/main/mainProject/core/src/com/mygdx/game/AwesomeGame.java)
 
 ## Layout plans:
 Current plans for ui
