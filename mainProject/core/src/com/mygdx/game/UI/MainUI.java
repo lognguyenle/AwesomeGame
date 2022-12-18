@@ -87,8 +87,7 @@ public class MainUI {
 		return group;
 	}
 
-	public static void typewriterEffect(final Label target, final String input, final DialogueMarker dialogueMarker,
-			final ScrollPane scrolly) { // typewriterEffect method
+	public static void typewriterEffect(final Table dialogueTextTable, final Label target, final String input, final DialogueMarker dialogueMarker) { // typewriterEffect method
 		Timer.schedule(new Task() { // a delayed for() loop
 			int i = 0;
 			boolean finished = false; // finished boolean to prevent overlapping events
@@ -98,7 +97,6 @@ public class MainUI {
 				if (i <= input.length()) {
 					target.setText(input.substring(0, i));
 					i++;
-					scrolly.scrollTo(0, 0, 0, 0);
 				}
 				if (input.length() + 1 == i && finished == false) {
 					dialogueMarker.setVisible(true);
@@ -110,8 +108,8 @@ public class MainUI {
 		}, 0, 0.02f, input.length());
 	}
 
-	public static void typewriterEffectUntouchable(final Label target, final String input,
-			final DialogueMarker dialogueMarker, final ScrollPane scrolly) { // typewriterEffect method
+	public static void typewriterEffectUntouchable(final Table dialogueBoxTable, final Label target, final String input,
+			final DialogueMarker dialogueMarker) { // typewriterEffect method
 		Timer.schedule(new Task() { // a delayed for() loop
 			int i = 0;
 			boolean finished = false; // finished boolean to prevent overlapping events
@@ -121,14 +119,13 @@ public class MainUI {
 				if (i <= input.length()) {
 					target.setText(input.substring(0, i));
 					i++;
-					scrolly.scrollTo(0, 0, 0, 0);
 				}
 				if (input.length() + 1 == i && finished == false) {
 					dialogueMarker.setVisible(true);
 					dialogueMarker.setColor(255, 255, 255, 1);
 					System.out.println("done?"); // console test print
 					finished = true;
-					target.setTouchable(Touchable.disabled);
+					dialogueBoxTable.setTouchable(Touchable.disabled);
 				}
 			}
 		}, 0, 0.02f, input.length());
@@ -158,16 +155,11 @@ public class MainUI {
 		TextDialogueLabelStyle.font = defaultFont;
 		TextDialogueLabelStyle.fontColor = Color.WHITE;
 		final Label DialogueLabel = new Label("", TextDialogueLabelStyle);
-		DialogueLabel.setAlignment(Align.left);
+		DialogueLabel.setAlignment(Align.topLeft);
 		DialogueLabel.setWrap(true);
 		DialogueLabel.setTouchable(Touchable.disabled);
-
-		// Scroll pane that takes in DialogueLabel
-		final ScrollPane scrolly = new ScrollPane(DialogueLabel);
-		scrolly.setScrollbarsVisible(true);
-		scrolly.setScrollY(20);
-		scrolly.setTouchable(Touchable.disabled);
-
+		DialogueLabel.setDebug(true);
+		
 		// Intialize DialogueMarker actor
 		final DialogueMarker dialogueMarker = new DialogueMarker();
 		stage.addActor(dialogueMarker);
@@ -188,19 +180,22 @@ public class MainUI {
 		Choices3.setTouchable(Touchable.enabled);
 
 		final Label ChoiceLabel1 = new Label("", TextDialogueLabelStyle);
-		ChoiceLabel1.setAlignment(Align.left);
+		ChoiceLabel1.setAlignment(Align.center);
 		ChoiceLabel1.setWrap(true);
 		ChoiceLabel1.setTouchable(Touchable.disabled);
+		Choices1.add(ChoiceLabel1).width(950);
 
 		final Label ChoiceLabel2 = new Label("", TextDialogueLabelStyle);
-		ChoiceLabel2.setAlignment(Align.left);
+		ChoiceLabel2.setAlignment(Align.center);
 		ChoiceLabel2.setWrap(true);
 		ChoiceLabel2.setTouchable(Touchable.disabled);
+		Choices2.add(ChoiceLabel2).width(950);
 
 		final Label ChoiceLabel3 = new Label("", TextDialogueLabelStyle);
-		ChoiceLabel3.setAlignment(Align.left);
+		ChoiceLabel3.setAlignment(Align.center);
 		ChoiceLabel3.setWrap(true);
 		ChoiceLabel3.setTouchable(Touchable.disabled);
+		Choices3.add(ChoiceLabel3).width(950);
 
 		VisualNovelTable.setDebug(true);
 		final Table DialogueBoxTable = new Table();
@@ -234,17 +229,13 @@ public class MainUI {
 		dialogueMarker.addAction(dialogueMarkerLooper);
 
 		// Adding Texttable
-		DialogueTextTable.add(scrolly).width(1250);
+		DialogueTextTable.add(DialogueLabel).width(1250);
 		DialogueTextTable.setZIndex(6);
 		DialogueTextTable.left().top();
-		DialogueTextTable.setTouchable(Touchable.disabled);
+		DialogueTextTable.setTouchable(Touchable.enabled);
 		DialogueBoxTable.add(DialogueTextTable).width(1250).height(188 - Choices1.getHeight());
 
-		// Adding Choice buttons, will move later, will probably add to typewriter
-		// effect below.
-		// int choices = 2;
 		VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", 0));
-		
 
 		// Test json printing in console
 		DialogueUI dog3DialogueUI = new DialogueUI();
@@ -289,7 +280,7 @@ public class MainUI {
 						if (Timer.instance().isEmpty() && timesClicked == 1) { // Whole text generation timer loop, uses
 																				// a timer that runs for the length of
 																				// the string, basically
-							typewriterEffect(DialogueLabel, currentDialogueText, dialogueMarker, scrolly);
+							typewriterEffect(DialogueBoxTable, DialogueLabel, currentDialogueText, dialogueMarker);
 							timesClicked = 0; // resets clicked variable
 							dialogueReference.nextDialogue(); // ticks to reference the next node in the dialogue tree
 						}
@@ -297,9 +288,13 @@ public class MainUI {
 
 					case 2:
 						VisualNovelTable.add(Choices1).padTop(choiceBump);
+						ChoiceLabel1.setText(dialogueReference.getChoice(0));
 						VisualNovelTable.row();
+
 						VisualNovelTable.add(Choices2).padTop(choiceBump);
+						ChoiceLabel2.setText(dialogueReference.getChoice(1));
 						VisualNovelTable.row();
+						
 						VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", dialogueReference.getChoiceCount()));
 						VisualNovelTable.left().top();
 						timesClicked++;
@@ -310,11 +305,12 @@ public class MainUI {
 							dialogueMarker.setColor(255, 255, 255, 1);
 							DialogueLabel.setText(currentDialogueText);
 							timesClicked = 0;
+							DialogueBoxTable.setTouchable(Touchable.disabled);
 						}
 						if (Timer.instance().isEmpty() && timesClicked == 1) { // Whole text generation timer loop, uses
 																				// a timer that runs for the length of
 																				// the string, basically
-							typewriterEffectUntouchable(DialogueLabel, currentDialogueText, dialogueMarker, scrolly);
+							typewriterEffectUntouchable(DialogueBoxTable, DialogueLabel, currentDialogueText, dialogueMarker);
 							timesClicked = 0; // resets clicked variable
 							dialogueReference.nextDialogue(); // ticks to reference the next node in the dialogue tree
 						}
@@ -322,10 +318,15 @@ public class MainUI {
 
 					case 3:
 						VisualNovelTable.add(Choices1).padTop(choiceBump);
+						ChoiceLabel1.setText(dialogueReference.getChoice(0));
 						VisualNovelTable.row();
+						
 						VisualNovelTable.add(Choices2).padTop(choiceBump);
+						ChoiceLabel2.setText(dialogueReference.getChoice(1));
 						VisualNovelTable.row();
+
 						VisualNovelTable.add(Choices3).padTop(choiceBump);
+						ChoiceLabel3.setText(dialogueReference.getChoice(2));
 						VisualNovelTable.row();
 						VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", dialogueReference.getChoiceCount()));
 						VisualNovelTable.left().top();
@@ -337,14 +338,13 @@ public class MainUI {
 							dialogueMarker.setColor(255, 255, 255, 1);
 							DialogueLabel.setText(currentDialogueText);
 							timesClicked = 0;
+							DialogueBoxTable.setTouchable(Touchable.disabled);
 						}
 						if (Timer.instance().isEmpty() && timesClicked == 1) { // Whole text generation timer loop, uses
 																				// a timer that runs for the length of
 																				// the string, basically
-							typewriterEffectUntouchable(DialogueLabel, currentDialogueText, dialogueMarker, scrolly);
+							typewriterEffectUntouchable(DialogueBoxTable, DialogueLabel, currentDialogueText, dialogueMarker);
 							timesClicked = 0; // resets clicked variable
-							DialogueBoxTable.setTouchable(Touchable.disabled); // ticks to reference the next node in
-																				// the dialogue tree
 						}
 						break;
 
@@ -352,6 +352,13 @@ public class MainUI {
 
 						break;
 				}
+
+			}
+		});
+
+		Choices1.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y){
 
 			}
 		});

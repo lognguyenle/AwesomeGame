@@ -43,7 +43,7 @@ public class DialogueUI {
 
     public void writeJson(String input){
         try {
-            FileWriter file = new FileWriter("test/assets/script/gamescript.json");
+            FileWriter file = new FileWriter("mainProject/assets/script/gamescript.json");
             file.write(input);
             file.close();
         } catch (IOException e) {

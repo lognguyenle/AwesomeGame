@@ -18,6 +18,10 @@ public class DialogueReference {
         return currentDialogue;
     }
 
+    public String getChoice(int i){
+        return dialogueMap.getChoiceText().get(i);
+    }
+
     public int getChoiceCount(){
         System.out.println(dialogueMap.choiceCount());
         System.out.println(dialogueMap.getCurrentDialogueId());
