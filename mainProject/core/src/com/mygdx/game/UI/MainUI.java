@@ -74,47 +74,49 @@ public class MainUI {
 			super.act(delta);
 		}
 	}
-	enum Status{
+
+	enum Status {
 		RUNNING, FINISHED, READY
 	}
 
-	public static class DialogueStatus{
-		
+	public static class DialogueStatus {
+
 		private Status currentStatus = Status.READY;
-		DialogueStatus(){
+
+		DialogueStatus() {
 		}
 
-		public void setRunning(){
+		public void setRunning() {
 			currentStatus = Status.RUNNING;
 			System.out.println(currentStatus);
 		}
 
-		public void setFinished(){
+		public void setFinished() {
 			currentStatus = Status.FINISHED;
 			System.out.println(currentStatus);
 		}
 
-		public void setReady(){
+		public void setReady() {
 			currentStatus = Status.READY;
 		}
 
-		public boolean isReady(){
-			if(currentStatus == Status.READY){
+		public boolean isReady() {
+			if (currentStatus == Status.READY) {
 				return true;
 			}
 			return false;
 		}
 
-		public boolean isRunning(){
-			if(currentStatus == Status.RUNNING){
+		public boolean isRunning() {
+			if (currentStatus == Status.RUNNING) {
 				return true;
 			}
 			return false;
 		}
 
-		public boolean isFinished(){
+		public boolean isFinished() {
 			System.out.println(currentStatus);
-			if(currentStatus == Status.FINISHED){
+			if (currentStatus == Status.FINISHED) {
 				return true;
 			}
 			return false;
@@ -135,26 +137,31 @@ public class MainUI {
 		return group;
 	}
 
-	public static void typewriterEffect(final Table dialogueTextTable, final Label target, final String input, final DialogueMarker dialogueMarker) { // typewriterEffect method
-		
+	public static void typewriterEffect(final Table dialogueBoxTable, final Label target, final String input,
+			final DialogueMarker dialogueMarker) { // typewriterEffect method
 		Timer.schedule(new Task() { // a delayed for() loop
-			
 			int i = 0;
 			boolean finished = false; // finished boolean to prevent overlapping events
 
 			public void run() {
-
 				dialogueMarker.setVisible(false);
-				if (i <= input.length() && dialogueStatus.isFinished()) {
+				if (dialogueStatus.isFinished()) {
+					Timer.instance().clear();
+
+				} else {
 					dialogueStatus.setRunning();
-					target.setText(input.substring(0, i));
-					i++;
-				}
-				if (input.length() + 1 == i && finished == false) {
-					dialogueMarker.setVisible(true);
-					dialogueMarker.setColor(255, 255, 255, 1);
-					System.out.println("done?"); // console test print
-					finished = true;
+					if (i <= input.length()) {
+						target.setText(input.substring(0, i));
+						i++;
+					}
+					if (input.length() + 1 == i && finished == false) {
+						dialogueMarker.setVisible(true);
+						dialogueMarker.setColor(255, 255, 255, 1);
+						System.out.println("done?"); // console test print
+						finished = true;
+						dialogueBoxTable.setTouchable(Touchable.enabled);
+						dialogueStatus.setFinished();
+					}
 				}
 			}
 		}, 0, 0.02f, input.length());
@@ -168,34 +175,34 @@ public class MainUI {
 
 			public void run() {
 				dialogueMarker.setVisible(false);
-				if(dialogueStatus.isFinished()){
+				if (dialogueStatus.isFinished()) {
 					Timer.instance().clear();
 
-				}else{
-				dialogueStatus.setRunning();
-				if (i <= input.length()) {
-					target.setText(input.substring(0, i));
-					i++;
+				} else {
+					dialogueStatus.setRunning();
+					if (i <= input.length()) {
+						target.setText(input.substring(0, i));
+						i++;
+					}
+					if (input.length() + 1 == i && finished == false) {
+						dialogueMarker.setVisible(true);
+						dialogueMarker.setColor(255, 255, 255, 1);
+						System.out.println("done?"); // console test print
+						finished = true;
+						dialogueBoxTable.setTouchable(Touchable.disabled);
+						dialogueStatus.setFinished();
+					}
 				}
-				if (input.length() + 1 == i && finished == false) {
-					dialogueMarker.setVisible(true);
-					dialogueMarker.setColor(255, 255, 255, 1);
-					System.out.println("done?"); // console test print
-					finished = true;
-					dialogueBoxTable.setTouchable(Touchable.disabled);
-					dialogueStatus.setFinished();
-				}
-			}
 			}
 		}, 0, 0.02f, input.length());
 	}
 
-	public static void skipDialogueGeneration(Label target, String input, DialogueMarker dialogueMarker){
-		if(dialogueStatus.isFinished() == false){
-		dialogueStatus.setFinished();
-		target.setText(input);
-		dialogueMarker.setVisible(true);
-		dialogueMarker.setColor(255, 255, 255, 1);
+	public static void skipDialogueGeneration(Label target, String input, DialogueMarker dialogueMarker) {
+		if (dialogueStatus.isFinished() == false) {
+			dialogueStatus.setFinished();
+			target.setText(input);
+			dialogueMarker.setVisible(true);
+			dialogueMarker.setColor(255, 255, 255, 1);
 		}
 	}
 
@@ -227,7 +234,7 @@ public class MainUI {
 		DialogueLabel.setWrap(true);
 		DialogueLabel.setTouchable(Touchable.disabled);
 		DialogueLabel.setDebug(true);
-		
+
 		// Intialize DialogueMarker actor
 		final DialogueMarker dialogueMarker = new DialogueMarker();
 		stage.addActor(dialogueMarker);
@@ -316,12 +323,10 @@ public class MainUI {
 		// move choice gui generator to stuff below.
 		final DialogueReference mainReference = new DialogueReference();
 
-		
-
-		DialogueBoxTable.addListener(new ClickListener() {	
+		DialogueBoxTable.addListener(new ClickListener() {
 			DialogueReference dialogueReference = mainReference; // Intializes dialogueReference object that
-																			// references the dialogue tree initialized
-																			// in dialogue UI
+																	// references the dialogue tree initialized
+																	// in dialogue UI
 			String currentDialogueText = dialogueReference.getDialogue(); // Receives the current dialogue of the node
 																			// in the tree through the dialogueReference
 																			// object
@@ -332,15 +337,16 @@ public class MainUI {
 				int choiceBump = ChoiceGUICalc("ChoiceBump", dialogueReference.getChoiceCount());
 				switch (dialogueReference.getChoiceCount()) {
 					case 1:
-						VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", dialogueReference.getChoiceCount())); 
+						VisualNovelTable.add(DialogueBoxTable)
+								.padTop(ChoiceGUICalc("DialogueBox", dialogueReference.getChoiceCount()));
 						currentDialogueText = dialogueReference.getDialogue();
-						if(dialogueStatus.isRunning()){
+						if (dialogueStatus.isRunning()) {
 							skipDialogueGeneration(DialogueLabel, currentDialogueText, dialogueMarker);
-							}
-	
-							if(dialogueStatus.isReady()){
+						}
+
+						if (dialogueStatus.isReady()) {
 							typewriterEffect(DialogueBoxTable, DialogueLabel, currentDialogueText, dialogueMarker);
-							}
+						}
 						break;
 
 					case 2:
@@ -353,17 +359,19 @@ public class MainUI {
 						ChoiceLabel2.setText(dialogueReference.getChoice(1));
 						VisualNovelTable.row();
 						Choices2.setTouchable(Touchable.enabled);
-						
-						VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", dialogueReference.getChoiceCount()));
+
+						VisualNovelTable.add(DialogueBoxTable)
+								.padTop(ChoiceGUICalc("DialogueBox", dialogueReference.getChoiceCount()));
 						VisualNovelTable.left().top();
 						currentDialogueText = dialogueReference.getDialogue();
-						if(dialogueStatus.isRunning()){
+						if (dialogueStatus.isRunning()) {
 							skipDialogueGeneration(DialogueLabel, currentDialogueText, dialogueMarker);
-							}
-	
-							if(dialogueStatus.isReady()){
-							typewriterEffectUntouchable(DialogueBoxTable, DialogueLabel, currentDialogueText, dialogueMarker);
-							}
+						}
+
+						if (dialogueStatus.isReady()) {
+							typewriterEffectUntouchable(DialogueBoxTable, DialogueLabel, currentDialogueText,
+									dialogueMarker);
+						}
 						break;
 
 					case 3:
@@ -382,15 +390,17 @@ public class MainUI {
 						VisualNovelTable.row();
 						Choices3.setTouchable(Touchable.enabled);
 
-						VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", dialogueReference.getChoiceCount()));
+						VisualNovelTable.add(DialogueBoxTable)
+								.padTop(ChoiceGUICalc("DialogueBox", dialogueReference.getChoiceCount()));
 						VisualNovelTable.left().top();
 						currentDialogueText = dialogueReference.getDialogue();
-						if(dialogueStatus.isRunning()){
-						skipDialogueGeneration(DialogueLabel, currentDialogueText, dialogueMarker);
+						if (dialogueStatus.isRunning()) {
+							skipDialogueGeneration(DialogueLabel, currentDialogueText, dialogueMarker);
 						}
 
-						if(dialogueStatus.isReady()){
-						typewriterEffectUntouchable(DialogueBoxTable, DialogueLabel, currentDialogueText, dialogueMarker);
+						if (dialogueStatus.isReady()) {
+							typewriterEffectUntouchable(DialogueBoxTable, DialogueLabel, currentDialogueText,
+									dialogueMarker);
 						}
 						break;
 
@@ -402,19 +412,19 @@ public class MainUI {
 			}
 		});
 
-		Choices1.addListener(new ClickListener(){
+		Choices1.addListener(new ClickListener() {
 			@Override
-			public void clicked(InputEvent event, float x, float y){
+			public void clicked(InputEvent event, float x, float y) {
 				dialogueStatus.setReady();
 				mainReference.chooseChoice(1);
 				System.out.println("Choice 1 chosen");
 				DialogueBoxTable.setTouchable(Touchable.enabled);
-				}
+			}
 		});
 
-		Choices2.addListener(new ClickListener(){
+		Choices2.addListener(new ClickListener() {
 			@Override
-			public void clicked(InputEvent event, float x, float y){
+			public void clicked(InputEvent event, float x, float y) {
 				dialogueStatus.setReady();
 				mainReference.chooseChoice(2);
 				System.out.println("Choice 2 chosen");
@@ -422,9 +432,9 @@ public class MainUI {
 			}
 		});
 
-		Choices3.addListener(new ClickListener(){
+		Choices3.addListener(new ClickListener() {
 			@Override
-			public void clicked(InputEvent event, float x, float y){
+			public void clicked(InputEvent event, float x, float y) {
 				dialogueStatus.setReady();
 				mainReference.chooseChoice(3);
 				System.out.println("Choice 3 chosen");
