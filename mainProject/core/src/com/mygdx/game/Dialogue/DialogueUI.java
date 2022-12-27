@@ -15,6 +15,7 @@ public class DialogueUI {
         DialogueHashMap.put(dialogue.getId(), dialogue);
         DialogueHashMap.put(dialogue2.getId(), dialogue2);
         DialogueHashMap.put(dialogue3.getId(), dialogue3);
+        DialogueHashMap.put(dialogue4.getId(), dialogue4);
         dialogueMap = new DialogueMap(new HashMap<String, Dialogue>(DialogueHashMap), "a1");
         dialogueMap.addChoice(choice1, choice2, choice3);
         dialogueMap.addChoice(choice4);
@@ -27,8 +28,9 @@ public class DialogueUI {
     DialogueChoice choice2 = new DialogueChoice("a1", "a3", "No");
     DialogueChoice choice3 = new DialogueChoice("a1", "a4", "Why?");
     Dialogue dialogue2 = new Dialogue("a2", "narrator", "Hey man......");
-    Dialogue dialogue3 = new Dialogue("a3", "narrator", "Testing, testing, Do you yield?");
+    Dialogue dialogue3 = new Dialogue("a3", "narrator", "Testing, testing, Do you yield????");
     DialogueChoice choice4 = new DialogueChoice("a2", "a3", "Yes");
+    Dialogue dialogue4 = new Dialogue("a4", "narrator", "Testing, testing, Do you yield??????");
 
     public void print(){
         System.out.println(dialogueMap.getDialogue());

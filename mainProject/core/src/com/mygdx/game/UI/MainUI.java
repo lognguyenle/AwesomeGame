@@ -74,6 +74,54 @@ public class MainUI {
 			super.act(delta);
 		}
 	}
+	enum Status{
+		RUNNING, FINISHED, READY
+	}
+
+	public static class DialogueStatus{
+		
+		private Status currentStatus = Status.READY;
+		DialogueStatus(){
+		}
+
+		public void setRunning(){
+			currentStatus = Status.RUNNING;
+			System.out.println(currentStatus);
+		}
+
+		public void setFinished(){
+			currentStatus = Status.FINISHED;
+			System.out.println(currentStatus);
+		}
+
+		public void setReady(){
+			currentStatus = Status.READY;
+		}
+
+		public boolean isReady(){
+			if(currentStatus == Status.READY){
+				return true;
+			}
+			return false;
+		}
+
+		public boolean isRunning(){
+			if(currentStatus == Status.RUNNING){
+				return true;
+			}
+			return false;
+		}
+
+		public boolean isFinished(){
+			System.out.println(currentStatus);
+			if(currentStatus == Status.FINISHED){
+				return true;
+			}
+			return false;
+		}
+	}
+
+	final static DialogueStatus dialogueStatus = new DialogueStatus();
 
 	public Table getTable() {
 		return table;
@@ -88,13 +136,17 @@ public class MainUI {
 	}
 
 	public static void typewriterEffect(final Table dialogueTextTable, final Label target, final String input, final DialogueMarker dialogueMarker) { // typewriterEffect method
+		
 		Timer.schedule(new Task() { // a delayed for() loop
+			
 			int i = 0;
 			boolean finished = false; // finished boolean to prevent overlapping events
 
 			public void run() {
+
 				dialogueMarker.setVisible(false);
-				if (i <= input.length()) {
+				if (i <= input.length() && dialogueStatus.isFinished()) {
+					dialogueStatus.setRunning();
 					target.setText(input.substring(0, i));
 					i++;
 				}
@@ -116,6 +168,11 @@ public class MainUI {
 
 			public void run() {
 				dialogueMarker.setVisible(false);
+				if(dialogueStatus.isFinished()){
+					Timer.instance().clear();
+
+				}else{
+				dialogueStatus.setRunning();
 				if (i <= input.length()) {
 					target.setText(input.substring(0, i));
 					i++;
@@ -126,9 +183,20 @@ public class MainUI {
 					System.out.println("done?"); // console test print
 					finished = true;
 					dialogueBoxTable.setTouchable(Touchable.disabled);
+					dialogueStatus.setFinished();
 				}
 			}
+			}
 		}, 0, 0.02f, input.length());
+	}
+
+	public static void skipDialogueGeneration(Label target, String input, DialogueMarker dialogueMarker){
+		if(dialogueStatus.isFinished() == false){
+		dialogueStatus.setFinished();
+		target.setText(input);
+		dialogueMarker.setVisible(true);
+		dialogueMarker.setColor(255, 255, 255, 1);
+		}
 	}
 
 	public MainUI() {
@@ -169,32 +237,29 @@ public class MainUI {
 		Pixmap ChoiceBG = new Pixmap(Gdx.files.internal("choicebox 3.png"));
 		TextureRegionDrawable ChoiceBGDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(ChoiceBG)));
 		Choices1.setBackground(ChoiceBGDrawable);
-		Choices1.setTouchable(Touchable.enabled);
+		Choices1.setTouchable(Touchable.disabled);
 
 		final Table Choices2 = new Table();
 		Choices2.setBackground(ChoiceBGDrawable);
-		Choices2.setTouchable(Touchable.enabled);
+		Choices2.setTouchable(Touchable.disabled);
 
 		final Table Choices3 = new Table();
 		Choices3.setBackground(ChoiceBGDrawable);
-		Choices3.setTouchable(Touchable.enabled);
+		Choices3.setTouchable(Touchable.disabled);
 
 		final Label ChoiceLabel1 = new Label("", TextDialogueLabelStyle);
 		ChoiceLabel1.setAlignment(Align.center);
 		ChoiceLabel1.setWrap(true);
-		ChoiceLabel1.setTouchable(Touchable.disabled);
 		Choices1.add(ChoiceLabel1).width(950);
 
 		final Label ChoiceLabel2 = new Label("", TextDialogueLabelStyle);
 		ChoiceLabel2.setAlignment(Align.center);
 		ChoiceLabel2.setWrap(true);
-		ChoiceLabel2.setTouchable(Touchable.disabled);
 		Choices2.add(ChoiceLabel2).width(950);
 
 		final Label ChoiceLabel3 = new Label("", TextDialogueLabelStyle);
 		ChoiceLabel3.setAlignment(Align.center);
 		ChoiceLabel3.setWrap(true);
-		ChoiceLabel3.setTouchable(Touchable.disabled);
 		Choices3.add(ChoiceLabel3).width(950);
 
 		VisualNovelTable.setDebug(true);
@@ -251,14 +316,15 @@ public class MainUI {
 		// move choice gui generator to stuff below.
 		final DialogueReference mainReference = new DialogueReference();
 
-		DialogueBoxTable.addListener(new ClickListener() {
+		
+
+		DialogueBoxTable.addListener(new ClickListener() {	
 			DialogueReference dialogueReference = mainReference; // Intializes dialogueReference object that
 																			// references the dialogue tree initialized
 																			// in dialogue UI
 			String currentDialogueText = dialogueReference.getDialogue(); // Receives the current dialogue of the node
 																			// in the tree through the dialogueReference
 																			// object
-			int timesClicked = 0; // Reads the times clicked for certain features
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -267,84 +333,64 @@ public class MainUI {
 				switch (dialogueReference.getChoiceCount()) {
 					case 1:
 						VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", dialogueReference.getChoiceCount())); 
-						timesClicked++;
 						currentDialogueText = dialogueReference.getDialogue();
-						if (timesClicked > 1) { // Completes text generation when clicked twice, resets click timer
-							Timer.instance().clear();
-							dialogueMarker.setVisible(true);
-							dialogueMarker.setColor(255, 255, 255, 1);
-							DialogueLabel.setText(currentDialogueText);
-							timesClicked = 0;
-						}
-
-						if (Timer.instance().isEmpty() && timesClicked == 1) { // Whole text generation timer loop, uses
-																				// a timer that runs for the length of
-																				// the string, basically
+						if(dialogueStatus.isRunning()){
+							skipDialogueGeneration(DialogueLabel, currentDialogueText, dialogueMarker);
+							}
+	
+							if(dialogueStatus.isReady()){
 							typewriterEffect(DialogueBoxTable, DialogueLabel, currentDialogueText, dialogueMarker);
-							timesClicked = 0; // resets clicked variable
-							dialogueReference.nextDialogue(); // ticks to reference the next node in the dialogue tree
-						}
+							}
 						break;
 
 					case 2:
 						VisualNovelTable.add(Choices1).padTop(choiceBump);
 						ChoiceLabel1.setText(dialogueReference.getChoice(0));
 						VisualNovelTable.row();
+						Choices1.setTouchable(Touchable.enabled);
 
 						VisualNovelTable.add(Choices2).padTop(choiceBump);
 						ChoiceLabel2.setText(dialogueReference.getChoice(1));
 						VisualNovelTable.row();
+						Choices2.setTouchable(Touchable.enabled);
 						
 						VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", dialogueReference.getChoiceCount()));
 						VisualNovelTable.left().top();
-						timesClicked++;
 						currentDialogueText = dialogueReference.getDialogue();
-						if (timesClicked > 1) { // Completes text generation when clicked twice, resets click timer
-							Timer.instance().clear();
-							dialogueMarker.setVisible(true);
-							dialogueMarker.setColor(255, 255, 255, 1);
-							DialogueLabel.setText(currentDialogueText);
-							timesClicked = 0;
-							DialogueBoxTable.setTouchable(Touchable.disabled);
-						}
-						if (Timer.instance().isEmpty() && timesClicked == 1) { // Whole text generation timer loop, uses
-																				// a timer that runs for the length of
-																				// the string, basically
+						if(dialogueStatus.isRunning()){
+							skipDialogueGeneration(DialogueLabel, currentDialogueText, dialogueMarker);
+							}
+	
+							if(dialogueStatus.isReady()){
 							typewriterEffectUntouchable(DialogueBoxTable, DialogueLabel, currentDialogueText, dialogueMarker);
-							timesClicked = 0; // resets clicked variable
-							dialogueReference.nextDialogue(); // ticks to reference the next node in the dialogue tree
-						}
+							}
 						break;
 
 					case 3:
 						VisualNovelTable.add(Choices1).padTop(choiceBump);
 						ChoiceLabel1.setText(dialogueReference.getChoice(0));
 						VisualNovelTable.row();
-						
+						Choices1.setTouchable(Touchable.enabled);
+
 						VisualNovelTable.add(Choices2).padTop(choiceBump);
 						ChoiceLabel2.setText(dialogueReference.getChoice(1));
 						VisualNovelTable.row();
+						Choices2.setTouchable(Touchable.enabled);
 
 						VisualNovelTable.add(Choices3).padTop(choiceBump);
 						ChoiceLabel3.setText(dialogueReference.getChoice(2));
 						VisualNovelTable.row();
+						Choices3.setTouchable(Touchable.enabled);
+
 						VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", dialogueReference.getChoiceCount()));
 						VisualNovelTable.left().top();
-						timesClicked++;
 						currentDialogueText = dialogueReference.getDialogue();
-						if (timesClicked > 1) { // Completes text generation when clicked twice, resets click timer
-							Timer.instance().clear();
-							dialogueMarker.setVisible(true);
-							dialogueMarker.setColor(255, 255, 255, 1);
-							DialogueLabel.setText(currentDialogueText);
-							timesClicked = 0;
-							DialogueBoxTable.setTouchable(Touchable.disabled);
+						if(dialogueStatus.isRunning()){
+						skipDialogueGeneration(DialogueLabel, currentDialogueText, dialogueMarker);
 						}
-						if (Timer.instance().isEmpty() && timesClicked == 1) { // Whole text generation timer loop, uses
-																				// a timer that runs for the length of
-																				// the string, basically
-							typewriterEffectUntouchable(DialogueBoxTable, DialogueLabel, currentDialogueText, dialogueMarker);
-							timesClicked = 0; // resets clicked variable
+
+						if(dialogueStatus.isReady()){
+						typewriterEffectUntouchable(DialogueBoxTable, DialogueLabel, currentDialogueText, dialogueMarker);
 						}
 						break;
 
@@ -359,7 +405,30 @@ public class MainUI {
 		Choices1.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
+				dialogueStatus.setReady();
+				mainReference.chooseChoice(1);
+				System.out.println("Choice 1 chosen");
+				DialogueBoxTable.setTouchable(Touchable.enabled);
+				}
+		});
 
+		Choices2.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				dialogueStatus.setReady();
+				mainReference.chooseChoice(2);
+				System.out.println("Choice 2 chosen");
+				DialogueBoxTable.setTouchable(Touchable.enabled);
+			}
+		});
+
+		Choices3.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				dialogueStatus.setReady();
+				mainReference.chooseChoice(3);
+				System.out.println("Choice 3 chosen");
+				DialogueBoxTable.setTouchable(Touchable.enabled);
 			}
 		});
 	}
