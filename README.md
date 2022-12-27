@@ -16,4 +16,8 @@ Definitely not final
 ![here](https://github.com/lognguyenle/AwesomeGame/blob/main/Documentation/layout.png?raw=true)
 
 
-# HI
+# Current Stuff To do
+[ ] Centralize typeWriterEffect method in MainUI.java to respond to three different conditions.
+[ ] Add fancy UI stuff like highlighting when hovering over a choice.
+[ ] Add a label for the 'character' that is speaking.
+[ ] Figure out a better way to import dialogue scripts.
