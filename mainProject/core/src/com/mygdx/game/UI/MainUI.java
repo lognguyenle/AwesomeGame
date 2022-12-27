@@ -44,6 +44,9 @@ public class MainUI {
 
 		switch (Type) {
 			case "DialogueBox":
+				if(ChoiceAmount == 1){
+					result = DialogueBoxPad;
+				}else
 				result = DialogueBoxPad - (ChoiceAmount * ChoiceAll);
 				break;
 
@@ -88,12 +91,10 @@ public class MainUI {
 
 		public void setRunning() {
 			currentStatus = Status.RUNNING;
-			System.out.println(currentStatus);
 		}
 
 		public void setFinished() {
 			currentStatus = Status.FINISHED;
-			System.out.println(currentStatus);
 		}
 
 		public void setReady() {
@@ -115,7 +116,6 @@ public class MainUI {
 		}
 
 		public boolean isFinished() {
-			System.out.println(currentStatus);
 			if (currentStatus == Status.FINISHED) {
 				return true;
 			}
@@ -333,6 +333,7 @@ public class MainUI {
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				DialogueReference dialogueReference = mainReference;
 				VisualNovelTable.clearChildren(); // Temporary fix to clear tables like choice sprites
 				int choiceBump = ChoiceGUICalc("ChoiceBump", dialogueReference.getChoiceCount());
 				switch (dialogueReference.getChoiceCount()) {

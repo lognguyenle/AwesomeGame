@@ -1,4 +1,5 @@
 package com.mygdx.game.Dialogue;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -10,8 +11,8 @@ import com.badlogic.gdx.utils.JsonWriter.OutputType;
 public class DialogueUI {
     private Map<String, Dialogue> DialogueHashMap = new HashMap<String, Dialogue>();
     int a;
-    
-    public DialogueUI(){
+
+    public DialogueUI() {
         DialogueHashMap.put(dialogue.getId(), dialogue);
         DialogueHashMap.put(dialogue2.getId(), dialogue2);
         DialogueHashMap.put(dialogue3.getId(), dialogue3);
@@ -32,18 +33,19 @@ public class DialogueUI {
     DialogueChoice choice4 = new DialogueChoice("a2", "a3", "Yes");
     Dialogue dialogue4 = new Dialogue("a4", "narrator", "Testing, testing, Do you yield??????");
 
-    public void print(){
+    public void print() {
         System.out.println(dialogueMap.getDialogue());
-    } 
+    }
 
     Json json = new Json();
-    public String toJson(){
+
+    public String toJson() {
         json.setOutputType(OutputType.json);
         System.out.println(json.prettyPrint(dialogueMap));
         return json.prettyPrint(dialogueMap);
     }
 
-    public void writeJson(String input){
+    public void writeJson(String input) {
         try {
             FileWriter file = new FileWriter("mainProject/assets/script/gamescript.json");
             file.write(input);
@@ -53,10 +55,8 @@ public class DialogueUI {
         }
     }
 
-    public static DialogueMap getDialogueMap(){
+    public static DialogueMap getDialogueMap() {
         return dialogueMap;
     }
-
-
 
 }
