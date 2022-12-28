@@ -52,7 +52,14 @@
 			"choiceText": "Yes"
 		}
 	],
-	"a3": [],
+	"a3": [
+		{
+			"class": "com.mygdx.game.Dialogue.DialogueChoice",
+			"sourceId": "a3",
+			"destinationId": "a2",
+			"choiceText": "pass"
+		}
+	],
 	"a4": []
 },
 "currentId": "a1"

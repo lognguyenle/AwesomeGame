@@ -20,6 +20,7 @@ public class DialogueUI {
         dialogueMap = new DialogueMap(new HashMap<String, Dialogue>(DialogueHashMap), "a1");
         dialogueMap.addChoice(choice1, choice2, choice3);
         dialogueMap.addChoice(choice4);
+        dialogueMap.addChoice(choice5);
         a = 0;
     }
 
@@ -30,6 +31,7 @@ public class DialogueUI {
     DialogueChoice choice3 = new DialogueChoice("a1", "a4", "Why?");
     Dialogue dialogue2 = new Dialogue("a2", "narrator", "Hey man......");
     Dialogue dialogue3 = new Dialogue("a3", "narrator", "Testing, testing, Do you yield????");
+    DialogueChoice choice5 = new DialogueChoice("a3", "a2", "pass");
     DialogueChoice choice4 = new DialogueChoice("a2", "a3", "Yes");
     Dialogue dialogue4 = new Dialogue("a4", "narrator", "Testing, testing, Do you yield??????");
 
