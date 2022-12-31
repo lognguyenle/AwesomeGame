@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -296,66 +296,87 @@ public class MainUI {
 		table.top().left();
 
 		// Setup tables for ui
-		final Table VisualNovelTable = new Table();
+		final Table visualNovelTable = new Table();
 		Pixmap visualNovelBG = new Pixmap(Gdx.files.internal("background2.jpg"));
 		TextureRegionDrawable visualNovelBGDrawable = new TextureRegionDrawable(
 				new TextureRegion(new Texture(visualNovelBG)));
-		VisualNovelTable.setBackground(visualNovelBGDrawable);
-		table.add(VisualNovelTable).padLeft(20).padTop(20);
+		visualNovelTable.setBackground(visualNovelBGDrawable);
+		table.add(visualNovelTable).padLeft(20).padTop(20);
 
 		// UI DialogueLabel Widget
-		final Table DialogueTextTable = new Table();
-		Label.LabelStyle TextDialogueLabelStyle = new Label.LabelStyle();
+		final Table dialogueTextTable = new Table();
+		Label.LabelStyle textDialogueLabelStyle = new Label.LabelStyle();
 		BitmapFont defaultFont = new BitmapFont(Gdx.files.internal("font.fnt"));
-		TextDialogueLabelStyle.font = defaultFont;
-		TextDialogueLabelStyle.fontColor = Color.WHITE;
-		final Label DialogueLabel = new Label("", TextDialogueLabelStyle);
-		DialogueLabel.setAlignment(Align.topLeft);
-		DialogueLabel.setWrap(true);
-		DialogueLabel.setTouchable(Touchable.disabled);
-		DialogueLabel.setDebug(true);
+		textDialogueLabelStyle.font = defaultFont;
+		textDialogueLabelStyle.fontColor = Color.WHITE;
+		final Label cialogueLabel = new Label("", textDialogueLabelStyle);
+		cialogueLabel.setAlignment(Align.topLeft);
+		cialogueLabel.setWrap(true);
+		cialogueLabel.setTouchable(Touchable.disabled);
+		cialogueLabel.setDebug(true);
 
 		// Intialize DialogueMarker actor
 		final DialogueMarker dialogueMarker = new DialogueMarker();
 		stage.addActor(dialogueMarker);
 
 		// Intialize Dialogue choice tables
-		final Table Choices1 = new Table();
-		Pixmap ChoiceBG = new Pixmap(Gdx.files.internal("choicebox 3.png"));
-		TextureRegionDrawable ChoiceBGDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(ChoiceBG)));
-		Choices1.setBackground(ChoiceBGDrawable);
-		Choices1.setTouchable(Touchable.disabled);
+		final Table choice1 = new Table();
+		Pixmap choiceBG = new Pixmap(Gdx.files.internal("choicebox 3.png"));
+		TextureRegionDrawable choiceBGDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(choiceBG)));
+		choice1.setBackground(choiceBGDrawable);
+		choice1.setTouchable(Touchable.disabled);
 
-		final Table Choices2 = new Table();
-		Choices2.setBackground(ChoiceBGDrawable);
-		Choices2.setTouchable(Touchable.disabled);
+		final Table choice2 = new Table();
+		choice2.setBackground(choiceBGDrawable);
+		choice2.setTouchable(Touchable.disabled);
 
-		final Table Choices3 = new Table();
-		Choices3.setBackground(ChoiceBGDrawable);
-		Choices3.setTouchable(Touchable.disabled);
+		final Table choice3 = new Table();
+		choice3.setBackground(choiceBGDrawable);
+		choice3.setTouchable(Touchable.disabled);
 
-		final Label ChoiceLabel1 = new Label("", TextDialogueLabelStyle);
-		ChoiceLabel1.setAlignment(Align.center);
-		ChoiceLabel1.setWrap(true);
-		Choices1.add(ChoiceLabel1).width(950);
+		final Table choiceOutline = new Table();
+		Pixmap ChoiceOutlineIMG = new Pixmap(Gdx.files.internal("choiceoutline.png"));
+		TextureRegionDrawable ChoiceOutlineIMGDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(ChoiceOutlineIMG)));
+		choiceOutline.setBackground(ChoiceOutlineIMGDrawable);
+		choiceOutline.setTouchable(Touchable.disabled);
+		choiceOutline.debugAll();
 
-		final Label ChoiceLabel2 = new Label("", TextDialogueLabelStyle);
-		ChoiceLabel2.setAlignment(Align.center);
-		ChoiceLabel2.setWrap(true);
-		Choices2.add(ChoiceLabel2).width(950);
+		final Stack choiceStack1 = new Stack();
+		final Stack choiceStack2 = new Stack();
+		final Stack choiceStack3 = new Stack();
 
-		final Label ChoiceLabel3 = new Label("", TextDialogueLabelStyle);
-		ChoiceLabel3.setAlignment(Align.center);
-		ChoiceLabel3.setWrap(true);
-		Choices3.add(ChoiceLabel3).width(950);
+		choice1.add(choiceStack1).size(1000, 121);
+		choice2.add(choiceStack2).size(1000, 121);
+		choice3.add(choiceStack3).size(1000, 121);
 
-		VisualNovelTable.setDebug(true);
-		final Table DialogueBoxTable = new Table();
+		
+
+		final Label choiceLabel1 = new Label("", textDialogueLabelStyle);
+		choiceLabel1.setAlignment(Align.center);
+		choiceLabel1.setWrap(true);
+		choiceLabel1.setTouchable(Touchable.disabled);
+		choiceStack1.add(choiceLabel1);
+
+		final Label choiceLabel2 = new Label("", textDialogueLabelStyle);
+		choiceLabel2.setAlignment(Align.center);
+		choiceLabel2.setWrap(true);
+		choiceLabel2.setTouchable(Touchable.disabled);
+		choiceStack2.add(choiceLabel2);
+
+		final Label choiceLabel3 = new Label("", textDialogueLabelStyle);
+		choiceLabel3.setAlignment(Align.center);
+		choiceLabel3.setWrap(true);
+		choiceLabel3.setTouchable(Touchable.disabled);
+		choiceStack3.add(choiceLabel3);
+		choiceLabel3.setDebug(true);
+
+		visualNovelTable.setDebug(true);
+		final Table dialogueBoxTable = new Table();
 		Pixmap DialogueBG = new Pixmap(Gdx.files.internal("dialogue box.png"));
 		TextureRegionDrawable DialogueBGDrawable = new TextureRegionDrawable(
 				new TextureRegion(new Texture(DialogueBG)));
-		DialogueBoxTable.setBackground(DialogueBGDrawable);
-		DialogueBoxTable.setTouchable(Touchable.enabled);
+		dialogueBoxTable.setBackground(DialogueBGDrawable);
+		dialogueBoxTable.setTouchable(Touchable.enabled);
 
 		// Looper for flashing dialogueMarker
 		final ColorAction transparent = new ColorAction();
@@ -381,13 +402,13 @@ public class MainUI {
 		dialogueMarker.addAction(dialogueMarkerLooper);
 
 		// Adding Texttable
-		DialogueTextTable.add(DialogueLabel).width(1250);
-		DialogueTextTable.setZIndex(6);
-		DialogueTextTable.left().top();
-		DialogueTextTable.setTouchable(Touchable.enabled);
-		DialogueBoxTable.add(DialogueTextTable).width(1250).height(188 - Choices1.getHeight());
+		dialogueTextTable.add(cialogueLabel).width(1250);
+		dialogueTextTable.setZIndex(6);
+		dialogueTextTable.left().top();
+		dialogueTextTable.setTouchable(Touchable.enabled);
+		dialogueBoxTable.add(dialogueTextTable).width(1250).height(188 - choice1.getHeight());
 
-		VisualNovelTable.add(DialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", 0));
+		visualNovelTable.add(dialogueBoxTable).padTop(ChoiceGUICalc("DialogueBox", 0));
 
 		// Test json printing in console
 		DialogueUI dog3DialogueUI = new DialogueUI();
@@ -403,47 +424,74 @@ public class MainUI {
 		// move choice gui generator to stuff below.
 		final DialogueReference mainReference = new DialogueReference();
 
-		DialogueBoxTable.addListener(new ClickListener() {
+		dialogueBoxTable.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				dialogueMainProcess(VisualNovelTable, DialogueLabel, Choices1, Choices2, Choices3, ChoiceLabel1,
-						ChoiceLabel2, ChoiceLabel3, DialogueBoxTable, dialogueMarker, mainReference);
+				dialogueMainProcess(visualNovelTable, cialogueLabel, choice1, choice2, choice3, choiceLabel1,
+						choiceLabel2, choiceLabel3, dialogueBoxTable, dialogueMarker, mainReference);
 			}
 		});
 
-		Choices1.addListener(new ClickListener() {
+		choice1.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				dialogueStatus.setReady();
 				mainReference.chooseChoice(1);
 				System.out.println("Choice 1 chosen");
-				DialogueBoxTable.setTouchable(Touchable.enabled);
-				dialogueMainProcess(VisualNovelTable, DialogueLabel, Choices1, Choices2, Choices3, ChoiceLabel1,
-						ChoiceLabel2, ChoiceLabel3, DialogueBoxTable, dialogueMarker, mainReference);
+				dialogueBoxTable.setTouchable(Touchable.enabled);
+				dialogueMainProcess(visualNovelTable, cialogueLabel, choice1, choice2, choice3, choiceLabel1,
+						choiceLabel2, choiceLabel3, dialogueBoxTable, dialogueMarker, mainReference);
+			}
+			@Override
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor){
+				choiceStack1.add(choiceOutline);
+
+			}
+			@Override
+			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor){
+				choiceStack1.removeActor(choiceOutline);
 			}
 		});
 
-		Choices2.addListener(new ClickListener() {
+		choice2.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				dialogueStatus.setReady();
 				mainReference.chooseChoice(2);
 				System.out.println("Choice 2 chosen");
-				DialogueBoxTable.setTouchable(Touchable.enabled);
-				dialogueMainProcess(VisualNovelTable, DialogueLabel, Choices1, Choices2, Choices3, ChoiceLabel1,
-						ChoiceLabel2, ChoiceLabel3, DialogueBoxTable, dialogueMarker, mainReference);
+				dialogueBoxTable.setTouchable(Touchable.enabled);
+				dialogueMainProcess(visualNovelTable, cialogueLabel, choice1, choice2, choice3, choiceLabel1,
+						choiceLabel2, choiceLabel3, dialogueBoxTable, dialogueMarker, mainReference);
+			}
+			@Override
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor){
+				choiceStack2.add(choiceOutline);
+
+			}
+			@Override
+			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor){
+				choiceStack2.removeActor(choiceOutline);
 			}
 		});
 
-		Choices3.addListener(new ClickListener() {
+		choice3.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				dialogueStatus.setReady();
 				mainReference.chooseChoice(3);
 				System.out.println("Choice 3 chosen");
-				DialogueBoxTable.setTouchable(Touchable.enabled);
-				dialogueMainProcess(VisualNovelTable, DialogueLabel, Choices1, Choices2, Choices3, ChoiceLabel1,
-						ChoiceLabel2, ChoiceLabel3, DialogueBoxTable, dialogueMarker, mainReference);
+				dialogueBoxTable.setTouchable(Touchable.enabled);
+				dialogueMainProcess(visualNovelTable, cialogueLabel, choice1, choice2, choice3, choiceLabel1,
+						choiceLabel2, choiceLabel3, dialogueBoxTable, dialogueMarker, mainReference);
+			}
+			@Override
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor){
+				choiceStack3.add(choiceOutline);
+
+			}
+			@Override
+			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor){
+				choiceStack3.removeActor(choiceOutline);
 			}
 		});
 	}
