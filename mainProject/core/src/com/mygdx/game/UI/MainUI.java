@@ -349,8 +349,6 @@ public class MainUI {
 		choice2.add(choiceStack2).size(1000, 121);
 		choice3.add(choiceStack3).size(1000, 121);
 
-		
-
 		final Label choiceLabel1 = new Label("", textDialogueLabelStyle);
 		choiceLabel1.setAlignment(Align.center);
 		choiceLabel1.setWrap(true);
@@ -415,10 +413,6 @@ public class MainUI {
 		dog3DialogueUI.print();
 		dog3DialogueUI.toJson();
 		dog3DialogueUI.writeJson(dog3DialogueUI.toJson());
-		String b = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-				+ "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit"
-				+ "in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt"
-				+ "mollit anim id est laborum.";
 
 		// Typewriter effect for clicking DialogueBoxTable, will add script scanner and
 		// move choice gui generator to stuff below.
