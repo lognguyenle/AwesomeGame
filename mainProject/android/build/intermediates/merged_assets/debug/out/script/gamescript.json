@@ -1,0 +1,53 @@
+{
+"keysToDialogue": {
+	"class": "java.util.HashMap",
+	"a1": {
+		"characterName": "narrator",
+		"dialogueText": "Testing, testing, Do you yield?",
+		"id": "a1"
+	},
+	"a2": {
+		"characterName": "narrator",
+		"dialogueText": "Hey man......",
+		"id": "a2"
+	},
+	"a3": {
+		"characterName": "narrator",
+		"dialogueText": "Testing, testing, Do you yield?",
+		"id": "a3"
+	}
+},
+"keysToDialogueChoices": {
+	"class": "java.util.HashMap",
+	"a1": [
+		{
+			"class": "com.mygdx.game.Dialogue.DialogueChoice",
+			"sourceId": "a1",
+			"destinationId": "a2",
+			"choiceText": "Yes"
+		},
+		{
+			"class": "com.mygdx.game.Dialogue.DialogueChoice",
+			"sourceId": "a1",
+			"destinationId": "a3",
+			"choiceText": "No"
+		},
+		{
+			"class": "com.mygdx.game.Dialogue.DialogueChoice",
+			"sourceId": "a1",
+			"destinationId": "a4",
+			"choiceText": "Why?"
+		}
+	],
+	"a2": [
+		{
+			"class": "com.mygdx.game.Dialogue.DialogueChoice",
+			"sourceId": "a2",
+			"destinationId": "a3",
+			"choiceText": "Yes"
+		}
+	],
+	"a3": []
+},
+"currentId": "a1"
+}
