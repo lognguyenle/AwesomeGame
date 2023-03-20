@@ -1,10 +1,10 @@
-package com.awesomegame.game;
+package com.lolop.awesomegame;
 
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.awesomegame.game.AwesomeGame;
+import com.lolop.awesomegame.AwesomeGame;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override

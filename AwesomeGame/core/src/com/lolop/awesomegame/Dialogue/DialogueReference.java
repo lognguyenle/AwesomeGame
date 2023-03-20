@@ -1,4 +1,4 @@
-package com.mygdx.game.Dialogue;
+package com.lolop.awesomegame.Dialogue;
 
 public class DialogueReference {
     //Used as a reference class for stupid scope errors

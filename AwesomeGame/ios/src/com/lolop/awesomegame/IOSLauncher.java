@@ -1,11 +1,11 @@
-package com.awesomegame.game;
+package com.lolop.awesomegame;
 
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;
 
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
-import com.awesomegame.game.AwesomeGame;
+import com.lolop.awesomegame.AwesomeGame;
 
 public class IOSLauncher extends IOSApplication.Delegate {
     @Override

@@ -1,5 +1,7 @@
-package com.mygdx.game.UI;
+package com.lolop.awesomegame.UI;
 
+import com.lolop.awesomegame.Dialogue.DialogueReference;
+import com.lolop.awesomegame.Dialogue.DialogueUI;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -27,8 +29,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
-import com.mygdx.game.Dialogue.DialogueReference;
-import com.mygdx.game.Dialogue.DialogueUI;
 
 public class MainUI {
 	private static Stage stage;

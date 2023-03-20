@@ -1,10 +1,10 @@
-package com.mygdx.game.Dialogue;
+package com.lolop.awesomegame.Dialogue;
 
 //Dialogue object that includes the text, person speaking, and the id of the dialogue.
 public class Dialogue{
-    private String characterName = " ";
-    private String dialogueText = " ";
-    private String id = " ";
+    private String characterName;
+    private String dialogueText;
+    private String id;
     public Dialogue(String idInput, String characterNameInput, String dialogueTextInput){
         id = idInput;
         characterName = characterNameInput;

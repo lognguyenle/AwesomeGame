@@ -1,10 +1,10 @@
-package com.mygdx.game;
+package com.lolop.awesomegame;
+import com.lolop.awesomegame.UI.MainUI;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.mygdx.game.UI.MainUI;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.math.*;

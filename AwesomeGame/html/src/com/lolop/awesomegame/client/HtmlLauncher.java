@@ -1,9 +1,9 @@
-package com.awesomegame.game.client;
+package com.lolop.awesomegame.client;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.awesomegame.game.AwesomeGame;
+import com.lolop.awesomegame.AwesomeGame;
 
 public class HtmlLauncher extends GwtApplication {
 

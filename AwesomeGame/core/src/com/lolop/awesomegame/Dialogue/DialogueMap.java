@@ -1,4 +1,4 @@
-package com.mygdx.game.Dialogue;
+package com.lolop.awesomegame.Dialogue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
