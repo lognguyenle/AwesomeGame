@@ -366,11 +366,7 @@ public class MainUI {
 		dialogueNameLabel.debug();
 		dialogueNameContainer.debug();
 		dialogueNameContainer.setBackground(DialogueBGDrawable, true);
-<<<<<<< HEAD:mainProject/core/src/com/mygdx/game/UI/MainUI.java
-		// dialogueNameContainer.max
-=======
 		dialogueNameContainer.maxSize(500,500);
->>>>>>> 70f2e65aace1b8d0e56e09c78498d5ceda6bc325:AwesomeGame/core/src/com/mygdx/game/UI/MainUI.java
 		System.out.println(dialogueNameContainer.getBackground());
 		stage.addActor(dialogueNameContainer);
 
