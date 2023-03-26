@@ -38,6 +38,10 @@ public class DialogueReference {
         currentDialogue = dialogueMap.getDialogue();
     }
 
+    public String getSpeaker(){
+        return dialogueMap.getSpeaker();
+    }
+
 
 
 }

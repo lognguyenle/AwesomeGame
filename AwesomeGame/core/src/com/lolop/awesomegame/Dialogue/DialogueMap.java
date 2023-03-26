@@ -48,6 +48,10 @@ public class DialogueMap {
         return currentId;
     }
 
+    public String getSpeaker(){
+        return keysToDialogue.get(currentId).getName();
+    }
+
     // NO idea how this is useful
     // public ArrayList<DialogueChoice> getCurrentChoiceList(){
     //     return keysToDialogueChoices.get(currentId);

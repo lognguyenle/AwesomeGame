@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -80,30 +81,6 @@ public class MainUI {
 			super.act(delta);
 		}
 	}
-
-	public class DialogueNameContainer extends Container<Label> {
-		//Texture texture = new Texture(Gdx.files.internal("background2.jpg"));
-		
-		
-		public DialogueNameContainer(Label dialogueNameLabel) {
-			super(dialogueNameLabel);
-		}
-		// TextureRegionDrawable dialogueNameBGDrawable = new TextureRegionDrawable(
-		// 		new TextureRegion(new Texture(dialogueNameBG)));
-		// Dialogue Name
-		// final Container<Label> dialogueNameContainer = new Container<Label>();
-		// final Label dialogueNameLabel = new Label("", textDialogueLabelStyle);
-		// dialogueNameLabel.setAlignment(Align.center);
-		// dialogueNameLabel.setWrap(true);
-		// dialogueNameLabel.setTouchable(Touchable.disabled);
-		// dialogueNameLabel.setDebug(false);
-		// dialogueNameLabel.setText("wow");
-		// visualNovelTable.add(dialogueNameContainer);
-		// dialogueNameContainer.setFillParent(false);
-		// dialogueNameContainer.setActor(dialogueNameLabel);
-		// dialogueNameContainer.setBackground(choiceBGDrawable);
-		// dialogueNameLabel.setDebug(true);
-}
 
 	enum Status {
 		RUNNING, FINISHED, READY
@@ -167,6 +144,7 @@ public class MainUI {
 	public static void typewriterEffect(final Table dialogueBoxTable, final Label target, final String input,
 			final DialogueMarker dialogueMarker, final boolean setUntouchable, final DialogueReference inputReference) { // typewriterEffect
 																															// method
+		Timer.instance().clear();
 		Timer.schedule(new Task() { // a delayed for() loop
 			int i = 0;
 			boolean finished = false; // finished boolean to prevent overlapping events
@@ -205,6 +183,7 @@ public class MainUI {
 
 	public static void skipDialogueGeneration(Table dialogueBoxTable, Label target, String input,
 			DialogueMarker dialogueMarker, boolean setUntouchable, DialogueReference inputReference) {
+
 		if (dialogueStatus.isFinished() == false) {
 			dialogueStatus.setFinished();
 			target.setText(input);
@@ -221,14 +200,16 @@ public class MainUI {
 		}
 	}
 
-	public static void dialogueMainProcess(Table visualNovelTable, Label DialogueLabel, Table choice1, Table choice2,
-			Table choice3,
-			Label choiceLabel1, Label choiceLabel2, Label choiceLabel3, Table dialogueBoxTable,
-			DialogueMarker dialogueMarker, DialogueReference inputReference) {
+	public static void dialogueMainProcess(Table visualNovelTable, Label DialogueLabel, 
+			Table choice1, Table choice2, Table choice3,
+			Label choiceLabel1, Label choiceLabel2, Label choiceLabel3, 
+			Table dialogueBoxTable, DialogueMarker dialogueMarker, DialogueReference inputReference, 
+			Table nameTable, Label nameLabel) {
 		DialogueReference dialogueReference = inputReference;
 		String currentDialogueText = dialogueReference.getDialogue();
 		visualNovelTable.clearChildren(); // Temporary fix to clear tables like choice sprites
 		int choiceBump = ChoiceGUICalc("ChoiceBump", dialogueReference.getChoiceCount());
+		nameLabel.setText(dialogueReference.getSpeaker());
 		switch (dialogueReference.getChoiceCount()) {
 			case 1:
 				visualNovelTable.add(dialogueBoxTable)
@@ -329,7 +310,7 @@ public class MainUI {
 				new TextureRegion(new Texture(visualNovelBG)));
 		visualNovelTable.setBackground(visualNovelBGDrawable);
 		table.add(visualNovelTable).padLeft(20).padTop(20);
-		table.setDebug(true);	
+		table.setDebug(false);	
 
 		//dialogueBox intialization
 		final Table dialogueBoxTable = new Table();
@@ -356,19 +337,18 @@ public class MainUI {
 		stage.addActor(dialogueMarker);
 
 		// Initialize DialogueName actor
-		final Label dialogueNameLabel = new Label("Name", textDialogueLabelStyle);
-		final Container<Label> dialogueNameContainer = new Container<Label>(dialogueNameLabel);
+		final Label dialogueNameLabel = new Label("", textDialogueLabelStyle);
+		final Table dialogueNameTable = new Table();
+		dialogueNameTable.add(dialogueNameLabel).left();
 		dialogueNameLabel.setVisible(true);
-		dialogueNameContainer.setVisible(true);
-		dialogueNameLabel.setZIndex(20);
-		dialogueNameContainer.setZIndex(19);
-		dialogueNameContainer.setPosition(150, 550);
-		dialogueNameLabel.debug();
-		dialogueNameContainer.debug();
-		dialogueNameContainer.setBackground(DialogueBGDrawable, true);
-		dialogueNameContainer.maxSize(500,500);
-		System.out.println(dialogueNameContainer.getBackground());
-		stage.addActor(dialogueNameContainer);
+		dialogueNameTable.setVisible(true);
+		dialogueNameLabel.setAlignment(Align.left);
+		dialogueNameLabel.setZIndex(99);
+		dialogueNameTable.setZIndex(99);
+		dialogueNameTable.setPosition(100, 540);
+		dialogueNameTable.setSize(200, 25);
+		dialogueNameTable.setBackground(DialogueBGDrawable);
+		stage.addActor(dialogueNameTable);
 
 		// Intialize Dialogue choice tables
 		final Table choice1 = new Table();
@@ -419,7 +399,7 @@ public class MainUI {
 		choiceStack3.add(choiceLabel3);
 		// choiceLabel3.setDebug(true);
 	
-		visualNovelTable.setDebug(true);
+		//visualNovelTable.setDebug(true);
 
 		// Looper for flashing dialogueMarker
 		final ColorAction transparent = new ColorAction();
@@ -466,12 +446,14 @@ public class MainUI {
 		// Typewriter effect for clicking DialogueBoxTable, will add script scanner and
 		// move choice gui generator to stuff below.
 		final DialogueReference mainReference = new DialogueReference();
+		dialogueMainProcess(visualNovelTable, dialogueLabel, choice1, choice2, choice3, choiceLabel1,
+						choiceLabel2, choiceLabel3, dialogueBoxTable, dialogueMarker, mainReference, dialogueNameTable, dialogueNameLabel);
 
 		dialogueBoxTable.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				dialogueMainProcess(visualNovelTable, dialogueLabel, choice1, choice2, choice3, choiceLabel1,
-						choiceLabel2, choiceLabel3, dialogueBoxTable, dialogueMarker, mainReference);
+						choiceLabel2, choiceLabel3, dialogueBoxTable, dialogueMarker, mainReference, dialogueNameTable, dialogueNameLabel);
 			}
 		});
 
@@ -483,7 +465,7 @@ public class MainUI {
 				System.out.println("Choice 1 chosen");
 				dialogueBoxTable.setTouchable(Touchable.enabled);
 				dialogueMainProcess(visualNovelTable, dialogueLabel, choice1, choice2, choice3, choiceLabel1,
-						choiceLabel2, choiceLabel3, dialogueBoxTable, dialogueMarker, mainReference);
+						choiceLabel2, choiceLabel3, dialogueBoxTable, dialogueMarker, mainReference, dialogueNameTable, dialogueNameLabel);
 			}
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor){
@@ -504,7 +486,7 @@ public class MainUI {
 				System.out.println("Choice 2 chosen");
 				dialogueBoxTable.setTouchable(Touchable.enabled);
 				dialogueMainProcess(visualNovelTable, dialogueLabel, choice1, choice2, choice3, choiceLabel1,
-						choiceLabel2, choiceLabel3, dialogueBoxTable, dialogueMarker, mainReference);
+						choiceLabel2, choiceLabel3, dialogueBoxTable, dialogueMarker, mainReference, dialogueNameTable, dialogueNameLabel);
 			}
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor){
@@ -525,7 +507,7 @@ public class MainUI {
 				System.out.println("Choice 3 chosen");
 				dialogueBoxTable.setTouchable(Touchable.enabled);
 				dialogueMainProcess(visualNovelTable, dialogueLabel, choice1, choice2, choice3, choiceLabel1,
-						choiceLabel2, choiceLabel3, dialogueBoxTable, dialogueMarker, mainReference);
+						choiceLabel2, choiceLabel3, dialogueBoxTable, dialogueMarker, mainReference, dialogueNameTable, dialogueNameLabel);
 			}
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor){
