@@ -1,5 +1,6 @@
 package com.lolop.awesomegame.UI;
 
+import com.lolop.awesomegame.TextureLoader;
 import com.lolop.awesomegame.Dialogue.DialogueReference;
 import com.lolop.awesomegame.Dialogue.DialogueUI;
 import com.badlogic.gdx.Gdx;
@@ -294,6 +295,11 @@ public class MainUI {
 	}
 
 	public MainUI() {
+		TextureLoader.load();
+		TextureRegionDrawable background = TextureLoader.generateDrawable("background2");
+		TextureRegionDrawable dialogueBoxTexture = TextureLoader.generateDrawable("dialogue box");
+		TextureRegionDrawable choiceBoxTexture = TextureLoader.generateDrawable("choicebox 3");
+		TextureRegionDrawable choiceBoxOutline = TextureLoader.generateDrawable("choiceoutline");
 
 		// Creates stage and then respective actors
 		stage = new Stage();
@@ -305,19 +311,13 @@ public class MainUI {
 
 		// Setup tables for ui
 		final Table visualNovelTable = new Table();
-		Pixmap visualNovelBG = new Pixmap(Gdx.files.internal("background2.jpg"));
-		TextureRegionDrawable visualNovelBGDrawable = new TextureRegionDrawable(
-				new TextureRegion(new Texture(visualNovelBG)));
-		visualNovelTable.setBackground(visualNovelBGDrawable);
+		visualNovelTable.setBackground(background);
 		table.add(visualNovelTable).padLeft(20).padTop(20);
 		table.setDebug(false);	
 
 		//dialogueBox intialization
 		final Table dialogueBoxTable = new Table();
-		Pixmap DialogueBG = new Pixmap(Gdx.files.internal("dialogue box.png"));
-		TextureRegionDrawable DialogueBGDrawable = new TextureRegionDrawable(
-				new TextureRegion(new Texture(DialogueBG)));
-		dialogueBoxTable.setBackground(DialogueBGDrawable);
+		dialogueBoxTable.setBackground(dialogueBoxTexture);
 		dialogueBoxTable.setTouchable(Touchable.enabled);
 
 		// UI DialogueLabel Widget
@@ -347,28 +347,24 @@ public class MainUI {
 		dialogueNameTable.setZIndex(99);
 		dialogueNameTable.setPosition(100, 540);
 		dialogueNameTable.setSize(200, 25);
-		dialogueNameTable.setBackground(DialogueBGDrawable);
+		dialogueNameTable.setBackground(dialogueBoxTexture);
 		stage.addActor(dialogueNameTable);
 
 		// Intialize Dialogue choice tables
 		final Table choice1 = new Table();
-		Pixmap choiceBG = new Pixmap(Gdx.files.internal("choicebox 3.png"));
-		TextureRegionDrawable choiceBGDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(choiceBG)));
-		choice1.setBackground(choiceBGDrawable);
+		choice1.setBackground(choiceBoxTexture);
 		choice1.setTouchable(Touchable.disabled);
 
 		final Table choice2 = new Table();
-		choice2.setBackground(choiceBGDrawable);
+		choice2.setBackground(choiceBoxTexture);
 		choice2.setTouchable(Touchable.disabled);
 
 		final Table choice3 = new Table();
-		choice3.setBackground(choiceBGDrawable);
+		choice3.setBackground(choiceBoxTexture);
 		choice3.setTouchable(Touchable.disabled);
 
 		final Table choiceOutline = new Table();
-		Pixmap ChoiceOutlineIMG = new Pixmap(Gdx.files.internal("choiceoutline.png"));
-		TextureRegionDrawable ChoiceOutlineIMGDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(ChoiceOutlineIMG)));
-		choiceOutline.setBackground(ChoiceOutlineIMGDrawable);
+		choiceOutline.setBackground(choiceBoxOutline);
 		choiceOutline.setTouchable(Touchable.disabled);
 		// choiceOutline.debugAll();
 

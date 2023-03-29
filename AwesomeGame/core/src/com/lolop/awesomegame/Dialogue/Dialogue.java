@@ -10,6 +10,11 @@ public class Dialogue{
         characterName = characterNameInput;
         dialogueText = dialogueTextInput;
     }
+
+    public Dialogue(String idInput, String characterNameInput, String dialogueTextInput, DialogueEvent dialogueEventInput){
+
+    }
+
     public void setId(String idInput){
         id = idInput;
     }
